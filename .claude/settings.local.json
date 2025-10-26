@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(php:*)",
+      "Bash(composer:*)",
+      "Bash(node --version:*)",
+      "Bash(npm --version:*)",
+      "Bash(INSTALL.bat)",
+      "Bash(test -f:*)",
+      "Bash(test:*)",
+      "Bash(cp:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

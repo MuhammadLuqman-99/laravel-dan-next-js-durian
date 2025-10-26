@@ -1,0 +1,5 @@
+node_modules/ 
+vendor/ 
+.env 
+durian-backend/.env 
+durian-frontend/.env 
