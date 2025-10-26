@@ -9,7 +9,8 @@
       "Bash(INSTALL.bat)",
       "Bash(test -f:*)",
       "Bash(test:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
