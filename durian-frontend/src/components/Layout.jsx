@@ -7,6 +7,7 @@ import {
   Leaf,
   TrendingUp,
   Stethoscope,
+  Droplet,
   LogOut,
   Menu,
   X,
@@ -22,6 +23,7 @@ const Layout = ({ children }) => {
     { name: 'Dashboard', path: '/dashboard', icon: Home },
     { name: 'Pokok Durian', path: '/pokok', icon: TreeDeciduous },
     { name: 'Baja', path: '/baja', icon: Leaf },
+    { name: 'Spray/Racun', path: '/spray', icon: Droplet },
     { name: 'Hasil', path: '/hasil', icon: TrendingUp },
     { name: 'Inspeksi', path: '/inspeksi', icon: Stethoscope },
   ];

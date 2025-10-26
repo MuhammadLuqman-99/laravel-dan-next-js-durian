@@ -8,6 +8,7 @@ import PokokDurian from './pages/PokokDurian';
 import Baja from './pages/Baja';
 import Hasil from './pages/Hasil';
 import Inspeksi from './pages/Inspeksi';
+import Spray from './pages/Spray';
 
 function App() {
   return (
@@ -69,6 +70,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Inspeksi />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/spray"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Spray />
                 </Layout>
               </ProtectedRoute>
             }

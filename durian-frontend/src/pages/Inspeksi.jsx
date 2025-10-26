@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { Plus, Edit, Trash2, Filter } from 'lucide-react';
+import { Plus, Edit, Trash2, Filter, Upload, X, Image as ImageIcon } from 'lucide-react';
 
 const Inspeksi = () => {
   const [inspeksi, setInspeksi] = useState([]);
@@ -16,6 +16,8 @@ const Inspeksi = () => {
     status: 'sihat',
     tindakan: '',
   });
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -40,10 +42,23 @@ const Inspeksi = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const submitData = new FormData();
+      Object.keys(formData).forEach(key => {
+        if (formData[key]) submitData.append(key, formData[key]);
+      });
+
+      if (imageFile) {
+        submitData.append('gambar', imageFile);
+      }
+
       if (editMode) {
-        await api.put(`/inspeksi/${formData.id}`, formData);
+        await api.post(`/inspeksi/${formData.id}?_method=PUT`, submitData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
       } else {
-        await api.post('/inspeksi', formData);
+        await api.post('/inspeksi', submitData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
       }
       setShowModal(false);
       resetForm();
@@ -51,6 +66,23 @@ const Inspeksi = () => {
     } catch (error) {
       alert(error.response?.data?.message || 'Error saving data');
     }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
   };
 
   const handleDelete = async (id) => {
@@ -72,6 +104,8 @@ const Inspeksi = () => {
       status: 'sihat',
       tindakan: '',
     });
+    setImageFile(null);
+    setImagePreview(null);
     setEditMode(false);
   };
 
@@ -127,6 +161,7 @@ const Inspeksi = () => {
                 <th>Pemeriksa</th>
                 <th>Status</th>
                 <th>Tindakan</th>
+                <th>Gambar</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -142,6 +177,20 @@ const Inspeksi = () => {
                     </span>
                   </td>
                   <td className="text-sm">{item.tindakan || '-'}</td>
+                  <td>
+                    {item.gambar ? (
+                      <a
+                        href={`http://localhost:8000/storage/${item.gambar}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-green-600 hover:text-green-800"
+                      >
+                        <ImageIcon size={20} />
+                      </a>
+                    ) : (
+                      <span className="text-gray-400">-</span>
+                    )}
+                  </td>
                   <td>
                     <div className="flex space-x-2">
                       <button onClick={() => { setFormData(item); setEditMode(true); setShowModal(true); }} className="text-blue-600 hover:text-blue-800">
@@ -196,6 +245,39 @@ const Inspeksi = () => {
                 <label className="label">Tindakan</label>
                 <textarea className="input-field" rows="3" value={formData.tindakan} onChange={(e) => setFormData({ ...formData, tindakan: e.target.value })}></textarea>
               </div>
+
+              {/* Image Upload */}
+              <div>
+                <label className="label">Gambar (Optional)</label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+                  {imagePreview ? (
+                    <div className="relative">
+                      <img src={imagePreview} alt="Preview" className="max-h-48 mx-auto rounded" />
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                      >
+                        <X size={20} />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="flex flex-col items-center cursor-pointer">
+                      <Upload className="text-gray-400 mb-2" size={40} />
+                      <span className="text-sm text-gray-600">Click untuk upload / ambil gambar</span>
+                      <span className="text-xs text-gray-400 mt-1">PNG, JPG up to 2MB</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        onChange={handleImageChange}
+                        className="hidden"
+                      />
+                    </label>
+                  )}
+                </div>
+              </div>
+
               <div className="flex justify-end space-x-3">
                 <button type="button" onClick={() => { setShowModal(false); resetForm(); }} className="btn-secondary">Batal</button>
                 <button type="submit" className="btn-primary">{editMode ? 'Kemaskini' : 'Simpan'}</button>
