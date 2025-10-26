@@ -9,24 +9,44 @@
 }
 
 @layer components {
+  /* Mobile-First Buttons - Touch-Friendly (48px min) */
   .btn-primary {
-    @apply bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors font-medium;
+    @apply bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 active:bg-primary-800 transition-colors font-medium min-h-[48px] flex items-center justify-center;
   }
 
   .btn-secondary {
-    @apply bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors font-medium;
+    @apply bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 active:bg-gray-400 transition-colors font-medium min-h-[48px] flex items-center justify-center;
   }
 
   .btn-danger {
-    @apply bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium;
+    @apply bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 active:bg-red-800 transition-colors font-medium min-h-[48px] flex items-center justify-center;
   }
 
+  /* Icon-only buttons for mobile */
+  .btn-icon {
+    @apply min-w-[48px] min-h-[48px] flex items-center justify-center rounded-lg transition-colors;
+  }
+
+  .btn-icon-primary {
+    @apply btn-icon bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
+  }
+
+  .btn-icon-secondary {
+    @apply btn-icon bg-gray-200 text-gray-700 hover:bg-gray-300 active:bg-gray-400;
+  }
+
+  .btn-icon-danger {
+    @apply btn-icon bg-red-100 text-red-600 hover:bg-red-200 active:bg-red-300;
+  }
+
+  /* Mobile-optimized card */
   .card {
-    @apply bg-white rounded-lg shadow-md p-6;
+    @apply bg-white rounded-lg shadow-md p-4 md:p-6;
   }
 
+  /* Mobile-First Inputs - Prevent iOS zoom with 16px font */
   .input-field {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply w-full px-4 py-3 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base min-h-[48px];
   }
 
   .label {
@@ -71,5 +91,85 @@
 
   .badge-info {
     @apply bg-blue-100 text-blue-800;
+  }
+
+  /* Mobile Card List (replacement for tables) */
+  .mobile-card {
+    @apply bg-white rounded-lg shadow p-4 mb-3 border border-gray-200 active:bg-gray-50 transition-colors;
+  }
+
+  .mobile-card-header {
+    @apply flex justify-between items-start mb-3;
+  }
+
+  .mobile-card-title {
+    @apply font-semibold text-gray-900 text-base;
+  }
+
+  .mobile-card-grid {
+    @apply grid grid-cols-2 gap-2 text-sm mb-3;
+  }
+
+  .mobile-card-item {
+    @apply flex flex-col;
+  }
+
+  .mobile-card-label {
+    @apply text-gray-500 text-xs mb-1;
+  }
+
+  .mobile-card-value {
+    @apply text-gray-900 font-medium;
+  }
+
+  .mobile-card-actions {
+    @apply flex gap-2 mt-3 pt-3 border-t border-gray-100;
+  }
+
+  /* Floating Action Button */
+  .fab {
+    @apply fixed bottom-20 right-4 md:bottom-6 w-14 h-14 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 active:bg-primary-800 flex items-center justify-center z-30 transition-all;
+  }
+
+  .fab:active {
+    @apply scale-95;
+  }
+
+  /* Modal - Mobile Optimized */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4;
+  }
+
+  .modal-content {
+    @apply bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8;
+  }
+
+  /* Mobile: full screen modal option */
+  @media (max-width: 640px) {
+    .modal-content-fullscreen {
+      @apply fixed inset-0 rounded-none max-h-full;
+    }
+  }
+}
+
+/* Mobile-specific overrides */
+@media (max-width: 768px) {
+  /* Ensure all inputs are 16px+ to prevent iOS zoom */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Better spacing for mobile */
+  .p-6 {
+    padding: 1rem;
+  }
+
+  /* Stack buttons on mobile */
+  .btn-group {
+    @apply flex flex-col gap-2;
+  }
+
+  .btn-group > button {
+    @apply w-full;
   }
 }

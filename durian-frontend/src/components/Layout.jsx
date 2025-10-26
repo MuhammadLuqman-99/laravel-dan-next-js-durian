@@ -120,7 +120,7 @@ const Layout = ({ children }) => {
         </header>
 
         {/* Page content */}
-        <main className="p-6">{children}</main>
+        <main className="p-6 pb-24 lg:pb-6">{children}</main>
       </div>
 
       {/* Overlay for mobile */}
@@ -130,6 +130,32 @@ const Layout = ({ children }) => {
           onClick={() => setSidebarOpen(false)}
         />
       )}
+
+      {/* Bottom Navigation for Mobile */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 safe-area-bottom">
+        <div className="grid grid-cols-5 gap-1 px-2 py-2">
+          {menuItems.slice(0, 5).map((item) => {
+            const Icon = item.icon;
+            const isActive = location.pathname === item.path;
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`flex flex-col items-center justify-center py-2 px-1 rounded-lg transition-colors min-h-[60px] ${
+                  isActive
+                    ? 'text-primary-600 bg-primary-50'
+                    : 'text-gray-600 hover:bg-gray-100 active:bg-gray-200'
+                }`}
+              >
+                <Icon size={22} className="mb-1" />
+                <span className="text-[10px] font-medium text-center leading-tight">
+                  {item.name.split(' ')[0]}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 };

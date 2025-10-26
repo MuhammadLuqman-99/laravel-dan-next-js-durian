@@ -142,17 +142,27 @@ const Spray = () => {
   const jenisList = ['racun', 'foliar', 'pesticide', 'fungicide', 'lain-lain'];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-20 md:pb-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Rekod Spray/Racun</h1>
           <p className="text-gray-600 mt-1">Track semua aktiviti spray dan foliar</p>
         </div>
-        <button onClick={() => setShowModal(true)} className="btn-primary">
+        {/* Desktop Add Button */}
+        <button onClick={() => setShowModal(true)} className="hidden md:flex btn-primary gap-2">
           <Plus size={20} />
           Tambah Baru
         </button>
       </div>
+
+      {/* Mobile FAB */}
+      <button
+        onClick={() => setShowModal(true)}
+        className="fab md:hidden"
+        aria-label="Tambah spray baru"
+      >
+        <Plus size={24} />
+      </button>
 
       {/* Filter & Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -181,68 +191,132 @@ const Spray = () => {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="card">
-        {loading ? (
+      {/* Data Display - Table for Desktop, Cards for Mobile */}
+      {loading ? (
+        <div className="card">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
             <p className="text-gray-500 mt-4">Loading...</p>
           </div>
-        ) : spray.length === 0 ? (
+        </div>
+      ) : spray.length === 0 ? (
+        <div className="card">
           <div className="text-center py-12">
             <Droplet className="mx-auto text-gray-400 mb-4" size={48} />
             <p className="text-gray-500">Tiada rekod spray</p>
           </div>
-        ) : (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Tarikh</th>
-                <th>Pokok</th>
-                <th>Jenis</th>
-                <th>Nama Bahan</th>
-                <th>Dosage</th>
-                <th>Pekerja</th>
-                <th>Status</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {spray.map((item) => (
-                <tr key={item.id}>
-                  <td>{new Date(item.tarikh_spray).toLocaleDateString('ms-MY')}</td>
-                  <td className="font-medium">{item.tree?.tag_no}</td>
-                  <td>
-                    <span className="badge badge-info">
+        </div>
+      ) : (
+        <>
+          {/* Desktop Table View */}
+          <div className="hidden md:block card">
+            <div className="table-container">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Tarikh</th>
+                    <th>Pokok</th>
+                    <th>Jenis</th>
+                    <th>Nama Bahan</th>
+                    <th>Dosage</th>
+                    <th>Pekerja</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {spray.map((item) => (
+                    <tr key={item.id}>
+                      <td>{new Date(item.tarikh_spray).toLocaleDateString('ms-MY')}</td>
+                      <td className="font-medium">{item.tree?.tag_no}</td>
+                      <td>
+                        <span className="badge badge-info">
+                          {item.jenis}
+                        </span>
+                      </td>
+                      <td>{item.nama_bahan}</td>
+                      <td className="text-sm">{item.dosage || '-'}</td>
+                      <td>{item.pekerja}</td>
+                      <td>{getStatusBadge(item.tarikh_spray, item.interval_hari)}</td>
+                      <td>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleEdit(item)}
+                            className="text-blue-600 hover:text-blue-800"
+                          >
+                            <Edit size={18} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(item.id)}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-3">
+            {spray.map((item) => (
+              <div key={item.id} className="mobile-card">
+                <div className="mobile-card-header">
+                  <div>
+                    <div className="mobile-card-title">{item.tree?.tag_no}</div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      {new Date(item.tarikh_spray).toLocaleDateString('ms-MY')}
+                    </div>
+                  </div>
+                  {getStatusBadge(item.tarikh_spray, item.interval_hari)}
+                </div>
+
+                <div className="mobile-card-grid">
+                  <div className="mobile-card-item">
+                    <span className="mobile-card-label">Jenis</span>
+                    <span className="badge badge-info inline-flex w-fit">
                       {item.jenis}
                     </span>
-                  </td>
-                  <td>{item.nama_bahan}</td>
-                  <td className="text-sm">{item.dosage || '-'}</td>
-                  <td>{item.pekerja}</td>
-                  <td>{getStatusBadge(item.tarikh_spray, item.interval_hari)}</td>
-                  <td>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleEdit(item)}
-                        className="text-blue-600 hover:text-blue-800"
-                      >
-                        <Edit size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(item.id)}
-                        className="text-red-600 hover:text-red-800"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+                  </div>
+                  <div className="mobile-card-item">
+                    <span className="mobile-card-label">Pekerja</span>
+                    <span className="mobile-card-value">{item.pekerja}</span>
+                  </div>
+                  <div className="mobile-card-item">
+                    <span className="mobile-card-label">Nama Bahan</span>
+                    <span className="mobile-card-value">{item.nama_bahan}</span>
+                  </div>
+                  <div className="mobile-card-item">
+                    <span className="mobile-card-label">Dosage</span>
+                    <span className="mobile-card-value">{item.dosage || '-'}</span>
+                  </div>
+                </div>
+
+                <div className="mobile-card-actions">
+                  <button
+                    onClick={() => handleEdit(item)}
+                    className="btn-icon-secondary flex-1"
+                  >
+                    <Edit size={20} />
+                    <span className="ml-2">Edit</span>
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item.id)}
+                    className="btn-icon-danger flex-1"
+                  >
+                    <Trash2 size={20} />
+                    <span className="ml-2">Hapus</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
       {/* Modal */}
       {showModal && (
@@ -358,15 +432,15 @@ const Spray = () => {
                 ></textarea>
               </div>
 
-              <div className="flex justify-end space-x-3">
+              <div className="flex flex-col md:flex-row justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => { setShowModal(false); resetForm(); }}
-                  className="btn-secondary"
+                  className="btn-secondary w-full md:w-auto order-2 md:order-1"
                 >
                   Batal
                 </button>
-                <button type="submit" className="btn-primary">
+                <button type="submit" className="btn-primary w-full md:w-auto order-1 md:order-2">
                   {editMode ? 'Kemaskini' : 'Simpan'}
                 </button>
               </div>
