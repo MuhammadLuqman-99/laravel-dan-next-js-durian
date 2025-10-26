@@ -9,6 +9,7 @@ import Baja from './pages/Baja';
 import Hasil from './pages/Hasil';
 import Inspeksi from './pages/Inspeksi';
 import Spray from './pages/Spray';
+import ActivityLogs from './pages/ActivityLogs';
 
 function App() {
   return (
@@ -80,6 +81,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Spray />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/activity-logs"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <ActivityLogs />
                 </Layout>
               </ProtectedRoute>
             }

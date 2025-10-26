@@ -8,6 +8,7 @@ import {
   TrendingUp,
   Stethoscope,
   Droplet,
+  Activity,
   LogOut,
   Menu,
   X,
@@ -27,6 +28,7 @@ const Layout = ({ children }) => {
     { name: 'Spray/Racun', path: '/spray', icon: Droplet },
     { name: 'Hasil', path: '/hasil', icon: TrendingUp },
     { name: 'Inspeksi', path: '/inspeksi', icon: Stethoscope },
+    { name: 'Activity Logs', path: '/activity-logs', icon: Activity },
   ];
 
   const handleLogout = async () => {
