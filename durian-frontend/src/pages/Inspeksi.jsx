@@ -117,24 +117,34 @@ const Inspeksi = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-20 md:pb-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Rekod Inspeksi</h1>
           <p className="text-gray-600">Pengurusan inspeksi kesihatan pokok</p>
         </div>
-        <button onClick={() => { resetForm(); setShowModal(true); }} className="btn-primary flex items-center">
-          <Plus size={20} className="mr-2" />
+        {/* Desktop Add Button */}
+        <button onClick={() => { resetForm(); setShowModal(true); }} className="hidden md:flex btn-primary items-center gap-2">
+          <Plus size={20} />
           Tambah Inspeksi
         </button>
       </div>
+
+      {/* Mobile FAB */}
+      <button
+        onClick={() => { resetForm(); setShowModal(true); }}
+        className="fab md:hidden"
+        aria-label="Tambah inspeksi"
+      >
+        <Plus size={24} />
+      </button>
 
       {/* Filter */}
       <div className="card">
         <div className="flex items-center space-x-4">
           <Filter size={20} className="text-gray-400" />
           <select
-            className="input-field w-64"
+            className="input-field flex-1 md:w-64"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
           >
@@ -147,73 +157,147 @@ const Inspeksi = () => {
         </div>
       </div>
 
-      <div className="table-container">
-        {loading ? (
+      {/* Data Display */}
+      {loading ? (
+        <div className="card">
           <div className="flex justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
           </div>
-        ) : (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Tarikh</th>
-                <th>Pokok</th>
-                <th>Pemeriksa</th>
-                <th>Status</th>
-                <th>Tindakan</th>
-                <th>Gambar</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {inspeksi.map((item) => (
-                <tr key={item.id}>
-                  <td>{new Date(item.tarikh_inspeksi).toLocaleDateString('ms-MY')}</td>
-                  <td className="font-medium">{item.tree?.tag_no}</td>
-                  <td>{item.pemeriksa}</td>
-                  <td>
-                    <span className={`badge ${statusColors[item.status]}`}>
-                      {item.status}
-                    </span>
-                  </td>
-                  <td className="text-sm">{item.tindakan || '-'}</td>
-                  <td>
+        </div>
+      ) : (
+        <>
+          {/* Desktop Table */}
+          <div className="hidden md:block">
+            <div className="table-container">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Tarikh</th>
+                    <th>Pokok</th>
+                    <th>Pemeriksa</th>
+                    <th>Status</th>
+                    <th>Tindakan</th>
+                    <th>Gambar</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {inspeksi.map((item) => (
+                    <tr key={item.id}>
+                      <td>{new Date(item.tarikh_inspeksi).toLocaleDateString('ms-MY')}</td>
+                      <td className="font-medium">{item.tree?.tag_no}</td>
+                      <td>{item.pemeriksa}</td>
+                      <td>
+                        <span className={`badge ${statusColors[item.status]}`}>
+                          {item.status}
+                        </span>
+                      </td>
+                      <td className="text-sm">{item.tindakan || '-'}</td>
+                      <td>
+                        {item.gambar ? (
+                          <a
+                            href={`http://localhost:8000/storage/${item.gambar}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-green-600 hover:text-green-800"
+                          >
+                            <ImageIcon size={20} />
+                          </a>
+                        ) : (
+                          <span className="text-gray-400">-</span>
+                        )}
+                      </td>
+                      <td>
+                        <div className="flex space-x-2">
+                          <button onClick={() => { setFormData(item); setEditMode(true); setShowModal(true); }} className="text-blue-600 hover:text-blue-800">
+                            <Edit size={18} />
+                          </button>
+                          <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-800">
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="md:hidden space-y-3">
+            {inspeksi.map((item) => (
+              <div key={item.id} className="mobile-card">
+                <div className="mobile-card-header">
+                  <div>
+                    <div className="mobile-card-title">{item.tree?.tag_no}</div>
+                    <div className="text-xs text-gray-500 mt-1">
+                      {new Date(item.tarikh_inspeksi).toLocaleDateString('ms-MY')}
+                    </div>
+                  </div>
+                  <span className={`badge ${statusColors[item.status]}`}>
+                    {item.status}
+                  </span>
+                </div>
+
+                <div className="mobile-card-grid">
+                  <div className="mobile-card-item">
+                    <span className="mobile-card-label">Pemeriksa</span>
+                    <span className="mobile-card-value">{item.pemeriksa}</span>
+                  </div>
+                  <div className="mobile-card-item">
+                    <span className="mobile-card-label">Gambar</span>
                     {item.gambar ? (
                       <a
                         href={`http://localhost:8000/storage/${item.gambar}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-green-600 hover:text-green-800"
+                        className="text-green-600 hover:text-green-800 flex items-center gap-1"
                       >
-                        <ImageIcon size={20} />
+                        <ImageIcon size={16} />
+                        <span className="text-xs">Lihat</span>
                       </a>
                     ) : (
-                      <span className="text-gray-400">-</span>
+                      <span className="mobile-card-value text-gray-400">-</span>
                     )}
-                  </td>
-                  <td>
-                    <div className="flex space-x-2">
-                      <button onClick={() => { setFormData(item); setEditMode(true); setShowModal(true); }} className="text-blue-600 hover:text-blue-800">
-                        <Edit size={18} />
-                      </button>
-                      <button onClick={() => handleDelete(item.id)} className="text-red-600 hover:text-red-800">
-                        <Trash2 size={18} />
-                      </button>
+                  </div>
+                  {item.tindakan && (
+                    <div className="mobile-card-item col-span-2">
+                      <span className="mobile-card-label">Tindakan</span>
+                      <span className="mobile-card-value text-sm">{item.tindakan}</span>
                     </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+                  )}
+                </div>
 
+                <div className="mobile-card-actions">
+                  <button
+                    onClick={() => { setFormData(item); setEditMode(true); setShowModal(true); }}
+                    className="btn-icon-secondary flex-1"
+                  >
+                    <Edit size={20} />
+                    <span className="ml-2">Edit</span>
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item.id)}
+                    className="btn-icon-danger flex-1"
+                  >
+                    <Trash2 size={20} />
+                    <span className="ml-2">Hapus</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">{editMode ? 'Edit Rekod Inspeksi' : 'Tambah Rekod Inspeksi'}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="label">Pokok</label>
                   <select className="input-field" value={formData.tree_id} onChange={(e) => setFormData({ ...formData, tree_id: e.target.value })} required>
@@ -278,9 +362,9 @@ const Inspeksi = () => {
                 </div>
               </div>
 
-              <div className="flex justify-end space-x-3">
-                <button type="button" onClick={() => { setShowModal(false); resetForm(); }} className="btn-secondary">Batal</button>
-                <button type="submit" className="btn-primary">{editMode ? 'Kemaskini' : 'Simpan'}</button>
+              <div className="flex flex-col md:flex-row justify-end gap-3">
+                <button type="button" onClick={() => { setShowModal(false); resetForm(); }} className="btn-secondary w-full md:w-auto order-2 md:order-1">Batal</button>
+                <button type="submit" className="btn-primary w-full md:w-auto order-1 md:order-2">{editMode ? 'Kemaskini' : 'Simpan'}</button>
               </div>
             </form>
           </div>
