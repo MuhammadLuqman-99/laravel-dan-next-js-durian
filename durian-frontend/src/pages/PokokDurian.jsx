@@ -92,24 +92,37 @@ const PokokDurian = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-20 md:pb-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Pokok Durian</h1>
           <p className="text-gray-600">Pengurusan data pokok durian</p>
         </div>
+        {/* Desktop Add Button */}
         <button
           onClick={() => {
             resetForm();
             setShowModal(true);
           }}
-          className="btn-primary flex items-center"
+          className="hidden md:flex btn-primary items-center gap-2"
         >
-          <Plus size={20} className="mr-2" />
+          <Plus size={20} />
           Tambah Pokok
         </button>
       </div>
+
+      {/* Mobile FAB */}
+      <button
+        onClick={() => {
+          resetForm();
+          setShowModal(true);
+        }}
+        className="fab md:hidden"
+        aria-label="Tambah pokok baru"
+      >
+        <Plus size={24} />
+      </button>
 
       {/* Search */}
       <div className="card">
@@ -125,70 +138,138 @@ const PokokDurian = () => {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="table-container">
-        {loading ? (
+      {/* Data Display */}
+      {loading ? (
+        <div className="card">
           <div className="flex justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
           </div>
-        ) : (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Tag No</th>
-                <th>Varieti</th>
-                <th>Umur</th>
-                <th>Lokasi</th>
-                <th>Tarikh Tanam</th>
-                <th>Status</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {pokok.map((item) => (
-                <tr key={item.id}>
-                  <td className="font-medium">{item.tag_no}</td>
-                  <td>{item.varieti}</td>
-                  <td>{item.umur} tahun</td>
-                  <td>{item.lokasi}</td>
-                  <td>{new Date(item.tarikh_tanam).toLocaleDateString('ms-MY')}</td>
-                  <td>
-                    <span className={`badge ${statusColors[item.status_kesihatan]}`}>
-                      {item.status_kesihatan}
+        </div>
+      ) : (
+        <>
+          {/* Desktop Table */}
+          <div className="hidden md:block">
+            <div className="table-container">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Tag No</th>
+                    <th>Varieti</th>
+                    <th>Umur</th>
+                    <th>Lokasi</th>
+                    <th>Tarikh Tanam</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {pokok.map((item) => (
+                    <tr key={item.id}>
+                      <td className="font-medium">{item.tag_no}</td>
+                      <td>{item.varieti}</td>
+                      <td>{item.umur} tahun</td>
+                      <td>{item.lokasi}</td>
+                      <td>{new Date(item.tarikh_tanam).toLocaleDateString('ms-MY')}</td>
+                      <td>
+                        <span className={`badge ${statusColors[item.status_kesihatan]}`}>
+                          {item.status_kesihatan}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => {
+                              setSelectedPokok(item);
+                              setShowQRModal(true);
+                            }}
+                            className="text-green-600 hover:text-green-800"
+                            title="Generate QR Code"
+                          >
+                            <QrCode size={18} />
+                          </button>
+                          <button
+                            onClick={() => handleEdit(item)}
+                            className="text-blue-600 hover:text-blue-800"
+                          >
+                            <Edit size={18} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(item.id)}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="md:hidden space-y-3">
+            {pokok.map((item) => (
+              <div key={item.id} className="mobile-card">
+                <div className="mobile-card-header">
+                  <div>
+                    <div className="mobile-card-title">{item.tag_no}</div>
+                    <div className="text-xs text-gray-500 mt-1">{item.varieti}</div>
+                  </div>
+                  <span className={`badge ${statusColors[item.status_kesihatan]}`}>
+                    {item.status_kesihatan}
+                  </span>
+                </div>
+
+                <div className="mobile-card-grid">
+                  <div className="mobile-card-item">
+                    <span className="mobile-card-label">Umur</span>
+                    <span className="mobile-card-value">{item.umur} tahun</span>
+                  </div>
+                  <div className="mobile-card-item">
+                    <span className="mobile-card-label">Lokasi</span>
+                    <span className="mobile-card-value">{item.lokasi}</span>
+                  </div>
+                  <div className="mobile-card-item col-span-2">
+                    <span className="mobile-card-label">Tarikh Tanam</span>
+                    <span className="mobile-card-value">
+                      {new Date(item.tarikh_tanam).toLocaleDateString('ms-MY')}
                     </span>
-                  </td>
-                  <td>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => {
-                          setSelectedPokok(item);
-                          setShowQRModal(true);
-                        }}
-                        className="text-green-600 hover:text-green-800"
-                        title="Generate QR Code"
-                      >
-                        <QrCode size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleEdit(item)}
-                        className="text-blue-600 hover:text-blue-800"
-                      >
-                        <Edit size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(item.id)}
-                        className="text-red-600 hover:text-red-800"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+                  </div>
+                </div>
+
+                <div className="mobile-card-actions">
+                  <button
+                    onClick={() => {
+                      setSelectedPokok(item);
+                      setShowQRModal(true);
+                    }}
+                    className="btn-icon-secondary flex-1"
+                  >
+                    <QrCode size={20} />
+                    <span className="ml-2">QR</span>
+                  </button>
+                  <button
+                    onClick={() => handleEdit(item)}
+                    className="btn-icon-secondary flex-1"
+                  >
+                    <Edit size={20} />
+                    <span className="ml-2">Edit</span>
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item.id)}
+                    className="btn-icon-danger flex-1"
+                  >
+                    <Trash2 size={20} />
+                    <span className="ml-2">Hapus</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
       {/* Modal */}
       {showModal && (
