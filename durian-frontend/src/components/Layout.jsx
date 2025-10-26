@@ -12,6 +12,7 @@ import {
   Menu,
   X,
 } from 'lucide-react';
+import OfflineIndicator from './OfflineIndicator';
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -35,6 +36,9 @@ const Layout = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Offline Indicator */}
+      <OfflineIndicator />
+
       {/* Sidebar */}
       <div
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
+import offlineApi from '../utils/offlineApi';
+import syncManager from '../utils/syncManager';
 import { Plus, Edit, Trash2, Droplet, AlertCircle, Clock } from 'lucide-react';
 
 const Spray = () => {
@@ -22,17 +24,34 @@ const Spray = () => {
 
   useEffect(() => {
     fetchData();
+
+    // Listen for sync completion to refresh data
+    syncManager.addSyncListener((event) => {
+      if (event === 'sync_complete') {
+        fetchData();
+      }
+    });
   }, [filterJenis]);
 
   const fetchData = async () => {
     try {
       const params = filterJenis ? { jenis: filterJenis } : {};
       const [sprayRes, pokokRes] = await Promise.all([
-        api.get('/spray', { params }),
-        api.get('/pokok'),
+        offlineApi.get('/spray', { params }),
+        offlineApi.get('/pokok'),
       ]);
-      setSpray(sprayRes.data.data.data);
-      setPokok(pokokRes.data.data.data);
+
+      // Handle offline cached data
+      const sprayData = sprayRes.data.data?.data || sprayRes.data.data || [];
+      const pokokData = pokokRes.data.data?.data || pokokRes.data.data || [];
+
+      setSpray(sprayData);
+      setPokok(pokokData);
+
+      // Show notification if data is from cache
+      if (sprayRes.fromCache || pokokRes.fromCache) {
+        console.log('⚠️ Viewing cached data (offline mode)');
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -43,10 +62,16 @@ const Spray = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      let response;
       if (editMode) {
-        await api.put(`/spray/${formData.id}`, formData);
+        response = await offlineApi.put(`/spray/${formData.id}`, formData);
       } else {
-        await api.post('/spray', formData);
+        response = await offlineApi.post('/spray', formData);
+      }
+
+      // Show message if queued for offline sync
+      if (response.offline) {
+        alert('✓ Data saved offline. Will sync when online.');
       }
       setShowModal(false);
       resetForm();
@@ -59,7 +84,13 @@ const Spray = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Adakah anda pasti untuk memadam rekod ini?')) {
       try {
-        await api.delete(`/spray/${id}`);
+        const response = await offlineApi.delete(`/spray/${id}`);
+
+        // Show message if queued for offline sync
+        if (response.offline) {
+          alert('✓ Delete queued. Will sync when online.');
+        }
+
         fetchData();
       } catch (error) {
         alert('Error deleting data');

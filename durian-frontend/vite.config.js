@@ -41,10 +41,14 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg}'],
         runtimeCaching: [
           {
-            urlPattern: /^http:\/\/localhost:8000\/api\/.*/i,
+            // API GET requests - Network First for fresh data
+            urlPattern: ({ request, url }) => {
+              return request.method === 'GET' && url.pathname.startsWith('/api/');
+            },
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'api-cache',
+              cacheName: 'api-get-cache',
+              networkTimeoutSeconds: 10,
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 60 * 24 // 24 hours
@@ -55,6 +59,22 @@ export default defineConfig({
             }
           },
           {
+            // Weather API - Cache first with network fallback
+            urlPattern: /^https:\/\/api\.open-meteo\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'weather-cache',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 30 // 30 minutes
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            // Images and uploaded files
             urlPattern: /^http:\/\/localhost:8000\/storage\/.*/i,
             handler: 'CacheFirst',
             options: {
@@ -64,8 +84,25 @@ export default defineConfig({
                 maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
               }
             }
+          },
+          {
+            // QR Code SVGs
+            urlPattern: /\/api\/pokok\/\d+\/qrcode/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'qrcode-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
+              }
+            }
           }
-        ]
+        ],
+        // Clean up old caches
+        cleanupOutdatedCaches: true,
+        // Skip waiting for immediate activation
+        skipWaiting: true,
+        clientsClaim: true
       }
     })
   ],

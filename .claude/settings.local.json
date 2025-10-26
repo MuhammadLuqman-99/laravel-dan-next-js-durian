@@ -10,7 +10,10 @@
       "Bash(test -f:*)",
       "Bash(test:*)",
       "Bash(cp:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []

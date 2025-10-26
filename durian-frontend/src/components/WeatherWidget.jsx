@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Cloud, CloudRain, CloudDrizzle, Sun, Wind, Droplets, AlertTriangle } from 'lucide-react';
+import { cacheWeatherData, getCachedWeather } from '../utils/offlineStorage';
 
 const WeatherWidget = () => {
   const [weather, setWeather] = useState(null);
@@ -19,14 +20,29 @@ const WeatherWidget = () => {
       const lat = 3.1390;
       const lon = 101.6869;
 
-      const response = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code&timezone=Asia/Singapore&forecast_days=3`
-      );
+      if (navigator.onLine) {
+        const response = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code&timezone=Asia/Singapore&forecast_days=3`
+        );
 
-      const data = await response.json();
-      setWeather(data);
+        const data = await response.json();
+        setWeather(data);
+        // Cache weather data for offline access
+        await cacheWeatherData(data);
+      } else {
+        // Load cached weather data when offline
+        const cached = await getCachedWeather();
+        if (cached) {
+          setWeather(cached);
+        }
+      }
     } catch (error) {
       console.error('Error fetching weather:', error);
+      // Try to load cached data on error
+      const cached = await getCachedWeather();
+      if (cached) {
+        setWeather(cached);
+      }
     } finally {
       setLoading(false);
     }
