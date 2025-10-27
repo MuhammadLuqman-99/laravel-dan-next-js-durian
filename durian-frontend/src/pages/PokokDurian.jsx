@@ -1,14 +1,19 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { Plus, Edit, Trash2, Search, QrCode } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, QrCode, Printer } from 'lucide-react';
 import QRCodeModal from '../components/QRCodeModal';
 import PhotoGallery from '../components/PhotoGallery';
+import PrintLabelsModal from '../components/PrintLabelsModal';
 
 const PokokDurian = () => {
   const [pokok, setPokok] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
+  const [showPrintModal, setShowPrintModal] = useState(false);
+  const [printMode, setPrintMode] = useState('single');
+  const [printTreeId, setPrintTreeId] = useState(null);
+  const [selectedTrees, setSelectedTrees] = useState([]);
   const [selectedPokok, setSelectedPokok] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [search, setSearch] = useState('');
@@ -128,9 +133,9 @@ const PokokDurian = () => {
         <Plus size={24} />
       </button>
 
-      {/* Search */}
+      {/* Search & Actions */}
       <div className="card">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 mb-3">
           <Search size={20} className="text-gray-400" />
           <input
             type="text"
@@ -139,6 +144,32 @@ const PokokDurian = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+        </div>
+
+        {/* Print Actions */}
+        <div className="flex flex-wrap gap-2 pt-3 border-t border-gray-200">
+          <button
+            onClick={() => {
+              setPrintMode('all');
+              setShowPrintModal(true);
+            }}
+            className="btn-secondary text-sm flex items-center gap-2"
+          >
+            <Printer size={16} />
+            Print All Labels
+          </button>
+          {selectedTrees.length > 0 && (
+            <button
+              onClick={() => {
+                setPrintMode('batch');
+                setShowPrintModal(true);
+              }}
+              className="btn-primary text-sm flex items-center gap-2"
+            >
+              <Printer size={16} />
+              Print Selected ({selectedTrees.length})
+            </button>
+          )}
         </div>
       </div>
 
@@ -181,6 +212,17 @@ const PokokDurian = () => {
                       </td>
                       <td>
                         <div className="flex space-x-2">
+                          <button
+                            onClick={() => {
+                              setPrintMode('single');
+                              setPrintTreeId(item.id);
+                              setShowPrintModal(true);
+                            }}
+                            className="text-purple-600 hover:text-purple-800"
+                            title="Print Label"
+                          >
+                            <Printer size={18} />
+                          </button>
                           <button
                             onClick={() => {
                               setSelectedPokok(item);
@@ -397,6 +439,18 @@ const PokokDurian = () => {
         }}
         pokokId={selectedPokok?.id}
         tagNo={selectedPokok?.tag_no}
+      />
+
+      {/* Print Labels Modal */}
+      <PrintLabelsModal
+        isOpen={showPrintModal}
+        onClose={() => {
+          setShowPrintModal(false);
+          setPrintTreeId(null);
+        }}
+        mode={printMode}
+        treeId={printTreeId}
+        selectedTrees={selectedTrees}
       />
     </div>
   );
