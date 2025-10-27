@@ -11,6 +11,7 @@ import Inspeksi from './pages/Inspeksi';
 import Spray from './pages/Spray';
 import ActivityLogs from './pages/ActivityLogs';
 import Expenses from './pages/Expenses';
+import Sales from './pages/Sales';
 
 function App() {
   return (
@@ -102,6 +103,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Expenses />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/sales"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Sales />
                 </Layout>
               </ProtectedRoute>
             }
