@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { Plus, Edit, Trash2, Search, QrCode } from 'lucide-react';
 import QRCodeModal from '../components/QRCodeModal';
+import PhotoGallery from '../components/PhotoGallery';
 
 const PokokDurian = () => {
   const [pokok, setPokok] = useState([]);
@@ -372,6 +373,17 @@ const PokokDurian = () => {
                 </button>
               </div>
             </form>
+
+            {/* Photo Gallery - Only show in edit mode */}
+            {editMode && formData.id && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <PhotoGallery
+                  photoableType="App\\Models\\PokokDurian"
+                  photoableId={formData.id}
+                  allowUpload={true}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { Plus, Edit, Trash2, Filter, Upload, X, Image as ImageIcon } from 'lucide-react';
+import PhotoGallery from '../components/PhotoGallery';
 
 const Inspeksi = () => {
   const [inspeksi, setInspeksi] = useState([]);
@@ -371,6 +372,17 @@ const Inspeksi = () => {
                 <button type="submit" className="btn-primary w-full md:w-auto order-1 md:order-2">{editMode ? 'Kemaskini' : 'Simpan'}</button>
               </div>
             </form>
+
+            {/* Photo Gallery - Only show in edit mode */}
+            {editMode && formData.id && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <PhotoGallery
+                  photoableType="App\\Models\\Inspeksi"
+                  photoableId={formData.id}
+                  allowUpload={true}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
