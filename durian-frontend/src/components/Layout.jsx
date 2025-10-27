@@ -16,11 +16,14 @@ import {
   LogOut,
   Menu,
   X,
+  MoreHorizontal,
+  ChevronUp,
 } from 'lucide-react';
 import OfflineIndicator from './OfflineIndicator';
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -157,8 +160,56 @@ const Layout = ({ children }) => {
 
       {/* Bottom Navigation for Mobile */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 safe-area-bottom">
+        {/* More Menu Popup */}
+        {moreMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-black bg-opacity-30 z-40"
+              onClick={() => setMoreMenuOpen(false)}
+            />
+            {/* More Menu Panel */}
+            <div className="absolute bottom-16 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 max-h-[60vh] overflow-y-auto">
+              <div className="py-2 px-4">
+                <div className="flex items-center justify-between py-3 border-b border-gray-200">
+                  <h3 className="text-sm font-semibold text-gray-700">Semua Menu</h3>
+                  <button
+                    onClick={() => setMoreMenuOpen(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <ChevronUp size={20} />
+                  </button>
+                </div>
+                <div className="py-2 space-y-1">
+                  {menuItems.slice(4).map((item) => {
+                    const Icon = item.icon;
+                    const isActive = location.pathname === item.path;
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        onClick={() => setMoreMenuOpen(false)}
+                        className={`flex items-center px-3 py-3 rounded-lg transition-colors ${
+                          isActive
+                            ? 'bg-primary-50 text-primary-600'
+                            : 'text-gray-700 hover:bg-gray-100'
+                        }`}
+                      >
+                        <Icon size={20} className="mr-3" />
+                        <span className="font-medium text-sm">{item.name}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Bottom Nav Items */}
         <div className="grid grid-cols-5 gap-1 px-2 py-2">
-          {menuItems.slice(0, 5).map((item) => {
+          {/* First 4 main menu items */}
+          {menuItems.slice(0, 4).map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
             return (
@@ -178,6 +229,19 @@ const Layout = ({ children }) => {
               </Link>
             );
           })}
+
+          {/* More Button */}
+          <button
+            onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+            className={`flex flex-col items-center justify-center py-2 px-1 rounded-lg transition-colors min-h-[60px] ${
+              moreMenuOpen
+                ? 'text-primary-600 bg-primary-50'
+                : 'text-gray-600 hover:bg-gray-100 active:bg-gray-200'
+            }`}
+          >
+            <MoreHorizontal size={22} className="mb-1" />
+            <span className="text-[10px] font-medium text-center leading-tight">Lagi</span>
+          </button>
         </div>
       </nav>
     </div>
