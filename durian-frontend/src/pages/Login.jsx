@@ -42,9 +42,9 @@ const Login = () => {
             </div>
           </div>
           <h2 className="mt-4 text-3xl font-bold text-gray-900">
-            Sistem Pengurusan
+            Sistem Pengurusan Kebun
           </h2>
-          <p className="mt-2 text-sm text-gray-600">Kebun Durian</p>
+          <p className="mt-2 text-sm text-gray-600">Farm Management System</p>
         </div>
 
         {/* Login Form */}

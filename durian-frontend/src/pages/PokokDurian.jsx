@@ -99,8 +99,8 @@ const PokokDurian = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Pokok Durian</h1>
-          <p className="text-gray-600">Pengurusan data pokok durian</p>
+          <h1 className="text-2xl font-bold text-gray-900">Tanaman</h1>
+          <p className="text-gray-600">Pengurusan data tanaman kebun</p>
         </div>
         {/* Desktop Add Button */}
         <button

@@ -26,7 +26,7 @@ const Layout = ({ children }) => {
 
   const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: Home },
-    { name: 'Pokok Durian', path: '/pokok', icon: TreeDeciduous },
+    { name: 'Tanaman', path: '/pokok', icon: TreeDeciduous },
     { name: 'Baja', path: '/baja', icon: Leaf },
     { name: 'Spray/Racun', path: '/spray', icon: Droplet },
     { name: 'Hasil', path: '/hasil', icon: TrendingUp },
@@ -56,7 +56,7 @@ const Layout = ({ children }) => {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center justify-between h-16 px-6 bg-primary-600">
-            <h1 className="text-xl font-bold text-white">Durian Farm</h1>
+            <h1 className="text-xl font-bold text-white">Sistem Kebun</h1>
             <button
               onClick={() => setSidebarOpen(false)}
               className="lg:hidden text-white"
@@ -119,7 +119,7 @@ const Layout = ({ children }) => {
               <Menu size={24} />
             </button>
             <h2 className="text-xl font-semibold text-gray-800">
-              Sistem Pengurusan Kebun Durian
+              Sistem Pengurusan Kebun
             </h2>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600">Selamat datang, {user?.name}</span>

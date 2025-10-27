@@ -43,7 +43,7 @@ const ActivityLogs = () => {
   };
 
   const moduleLabels = {
-    pokok: 'Pokok Durian',
+    pokok: 'Tanaman',
     baja: 'Baja',
     spray: 'Spray/Racun',
     hasil: 'Hasil',
@@ -70,7 +70,7 @@ const ActivityLogs = () => {
               onChange={(e) => setFilterModule(e.target.value)}
             >
               <option value="">Semua Module</option>
-              <option value="pokok">Pokok Durian</option>
+              <option value="pokok">Tanaman</option>
               <option value="baja">Baja</option>
               <option value="spray">Spray/Racun</option>
               <option value="hasil">Hasil</option>
