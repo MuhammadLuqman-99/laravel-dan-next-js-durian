@@ -22,6 +22,16 @@ const Settings = () => {
       setPresets(presetsRes.data.data);
     } catch (error) {
       console.error('Error fetching settings:', error);
+      alert('Error loading settings. Make sure backend is running!');
+      // Set default values if API fails
+      setSettings({
+        farm_name: 'Kebun Durian',
+        crop_type: 'durian',
+        crop_label_singular: 'Pokok Durian',
+        crop_label_plural: 'Pokok Durian',
+        unit_weight: 'kg',
+        unit_quantity: 'biji',
+      });
     } finally {
       setLoading(false);
     }
