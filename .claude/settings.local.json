@@ -19,7 +19,14 @@
       "Bash(findstr:*)",
       "Bash(curl:*)",
       "Bash(cat:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(tasklist:*)",
+      "Bash(netstat:*)",
+      "Bash(del nul)",
+      "Bash(if [ -f nul ])",
+      "Bash(then echo \"File exists\")",
+      "Bash(else echo \"File removed\")",
+      "Bash(fi)"
     ],
     "deny": [],
     "ask": []
