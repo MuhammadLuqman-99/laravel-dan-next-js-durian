@@ -11,6 +11,7 @@ import {
   Activity,
   DollarSign,
   ShoppingCart,
+  Settings as SettingsIcon,
   LogOut,
   Menu,
   X,
@@ -33,6 +34,7 @@ const Layout = ({ children }) => {
     { name: 'Jualan', path: '/sales', icon: ShoppingCart },
     { name: 'Perbelanjaan', path: '/expenses', icon: DollarSign },
     { name: 'Activity Logs', path: '/activity-logs', icon: Activity },
+    { name: 'Tetapan', path: '/settings', icon: SettingsIcon },
   ];
 
   const handleLogout = async () => {

@@ -12,6 +12,7 @@ import Spray from './pages/Spray';
 import ActivityLogs from './pages/ActivityLogs';
 import Expenses from './pages/Expenses';
 import Sales from './pages/Sales';
+import Settings from './pages/Settings';
 
 function App() {
   return (
@@ -113,6 +114,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Sales />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Settings />
                 </Layout>
               </ProtectedRoute>
             }
