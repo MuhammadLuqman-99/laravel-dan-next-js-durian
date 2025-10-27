@@ -10,6 +10,7 @@ import Hasil from './pages/Hasil';
 import Inspeksi from './pages/Inspeksi';
 import Spray from './pages/Spray';
 import ActivityLogs from './pages/ActivityLogs';
+import Expenses from './pages/Expenses';
 
 function App() {
   return (
@@ -91,6 +92,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <ActivityLogs />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/expenses"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Expenses />
                 </Layout>
               </ProtectedRoute>
             }
