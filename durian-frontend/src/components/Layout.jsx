@@ -12,6 +12,7 @@ import {
   DollarSign,
   ShoppingCart,
   Settings as SettingsIcon,
+  Users,
   LogOut,
   Menu,
   X,
@@ -20,7 +21,7 @@ import OfflineIndicator from './OfflineIndicator';
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -34,6 +35,7 @@ const Layout = ({ children }) => {
     { name: 'Jualan', path: '/sales', icon: ShoppingCart },
     { name: 'Perbelanjaan', path: '/expenses', icon: DollarSign },
     { name: 'Activity Logs', path: '/activity-logs', icon: Activity },
+    ...(isAdmin ? [{ name: 'Pengguna', path: '/users', icon: Users }] : []),
     { name: 'Tetapan', path: '/settings', icon: SettingsIcon },
   ];
 
@@ -126,6 +128,20 @@ const Layout = ({ children }) => {
             </div>
           </div>
         </header>
+
+        {/* View-Only Mode Banner for Pekerja */}
+        {!isAdmin && (
+          <div className="bg-yellow-50 border-b-2 border-yellow-200 px-6 py-3">
+            <div className="flex items-center gap-2 text-yellow-800">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm font-medium">
+                Anda dalam mod <strong>View Only</strong> - Hanya admin boleh tambah/edit/delete rekod
+              </span>
+            </div>
+          </div>
+        )}
 
         {/* Page content */}
         <main className="p-6 pb-24 lg:pb-6">{children}</main>

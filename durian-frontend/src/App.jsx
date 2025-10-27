@@ -13,6 +13,7 @@ import ActivityLogs from './pages/ActivityLogs';
 import Expenses from './pages/Expenses';
 import Sales from './pages/Sales';
 import Settings from './pages/Settings';
+import Users from './pages/Users';
 
 function App() {
   return (
@@ -124,6 +125,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Settings />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Users />
                 </Layout>
               </ProtectedRoute>
             }
