@@ -34,7 +34,11 @@ const Expenses = () => {
       setExpenses(expensesRes.data.data.data);
       setStats(statsRes.data.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching expenses data:', error);
+      alert('Error loading expenses data. Make sure backend is running!');
+      // Set default empty arrays to prevent blank page
+      setExpenses([]);
+      setStats(null);
     } finally {
       setLoading(false);
     }

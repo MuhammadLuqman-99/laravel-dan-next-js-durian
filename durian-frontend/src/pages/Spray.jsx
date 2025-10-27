@@ -53,7 +53,11 @@ const Spray = () => {
         console.log('⚠️ Viewing cached data (offline mode)');
       }
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching spray data:', error);
+      alert('Error loading spray data. Make sure backend is running!');
+      // Set default empty arrays to prevent blank page
+      setSpray([]);
+      setPokok([]);
     } finally {
       setLoading(false);
     }

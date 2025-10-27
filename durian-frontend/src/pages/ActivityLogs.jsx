@@ -21,7 +21,10 @@ const ActivityLogs = () => {
       const response = await api.get('/activity-logs', { params });
       setLogs(response.data.data.data);
     } catch (error) {
-      console.error('Error fetching logs:', error);
+      console.error('Error fetching activity logs:', error);
+      alert('Error loading activity logs. Make sure backend is running!');
+      // Set default empty array to prevent blank page
+      setLogs([]);
     } finally {
       setLoading(false);
     }

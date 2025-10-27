@@ -31,7 +31,11 @@ const Baja = () => {
       setBaja(bajaRes.data.data.data);
       setPokok(pokokRes.data.data.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching baja data:', error);
+      alert('Error loading baja data. Make sure backend is running!');
+      // Set default empty arrays to prevent blank page
+      setBaja([]);
+      setPokok([]);
     } finally {
       setLoading(false);
     }

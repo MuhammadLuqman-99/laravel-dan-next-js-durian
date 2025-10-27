@@ -33,7 +33,11 @@ const Inspeksi = () => {
       setInspeksi(inspeksiRes.data.data.data);
       setPokok(pokokRes.data.data.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching inspeksi data:', error);
+      alert('Error loading inspeksi data. Make sure backend is running!');
+      // Set default empty arrays to prevent blank page
+      setInspeksi([]);
+      setPokok([]);
     } finally {
       setLoading(false);
     }

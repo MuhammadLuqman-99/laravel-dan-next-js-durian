@@ -34,7 +34,12 @@ const Hasil = () => {
       setPokok(pokokRes.data.data.data);
       setStats(statsRes.data.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching hasil data:', error);
+      alert('Error loading hasil data. Make sure backend is running!');
+      // Set default empty arrays to prevent blank page
+      setHasil([]);
+      setPokok([]);
+      setStats(null);
     } finally {
       setLoading(false);
     }

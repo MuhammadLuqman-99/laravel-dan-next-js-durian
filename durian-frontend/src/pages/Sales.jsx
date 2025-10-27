@@ -34,7 +34,11 @@ const Sales = () => {
       setSales(salesRes.data.data.data);
       setStats(statsRes.data.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching sales data:', error);
+      alert('Error loading sales data. Make sure backend is running!');
+      // Set default empty arrays to prevent blank page
+      setSales([]);
+      setStats(null);
     } finally {
       setLoading(false);
     }

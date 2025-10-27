@@ -32,6 +32,9 @@ const PokokDurian = () => {
       setPokok(response.data.data.data);
     } catch (error) {
       console.error('Error fetching pokok:', error);
+      alert('Error loading pokok data. Make sure backend is running!');
+      // Set default empty array to prevent blank page
+      setPokok([]);
     } finally {
       setLoading(false);
     }
