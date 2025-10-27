@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { TreeDeciduous, TrendingUp, AlertTriangle, CheckCircle, Droplet, Clock, AlertOctagon, Cloud } from 'lucide-react';
+import { TreeDeciduous, TrendingUp, AlertTriangle, CheckCircle, Droplet, Clock, AlertOctagon, Cloud, DollarSign } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import WeatherWidget from '../components/WeatherWidget';
@@ -227,6 +227,56 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Expense Statistics */}
+      {stats?.expenses && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Expense Summary Cards */}
+          <div className="card bg-gradient-to-br from-green-500 to-green-600 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-white opacity-90 text-sm">Perbelanjaan Bulan Ini</p>
+                <h3 className="text-2xl font-bold mt-2">
+                  RM {parseFloat(stats.expenses.total_bulan_ini || 0).toFixed(2)}
+                </h3>
+              </div>
+              <DollarSign className="opacity-80" size={40} />
+            </div>
+          </div>
+
+          <div className="card bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-white opacity-90 text-sm">Perbelanjaan Tahun Ini</p>
+                <h3 className="text-2xl font-bold mt-2">
+                  RM {parseFloat(stats.expenses.total_tahun_ini || 0).toFixed(2)}
+                </h3>
+              </div>
+              <TrendingUp className="opacity-80" size={40} />
+            </div>
+          </div>
+
+          {/* Expense by Category */}
+          <div className="card">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-semibold">Kos Tertinggi</h3>
+              <Link to="/expenses" className="text-sm text-primary-600 hover:text-primary-700">
+                Lihat Semua
+              </Link>
+            </div>
+            <div className="space-y-2">
+              {stats.expenses.by_kategori?.slice(0, 3).map((item) => (
+                <div key={item.kategori} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                  <span className="text-sm capitalize font-medium">{item.kategori}</span>
+                  <span className="text-sm font-semibold text-green-600">
+                    RM {parseFloat(item.total).toFixed(2)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Recent Inspections */}
       <div className="card">
