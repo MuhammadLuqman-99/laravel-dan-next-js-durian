@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { Settings as SettingsIcon, Save } from 'lucide-react';
+import { Settings as SettingsIcon, Save, Database, Download, Clock } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Settings = () => {
+  const { isAdmin } = useAuth();
   const [settings, setSettings] = useState(null);
   const [presets, setPresets] = useState({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [backingUp, setBackingUp] = useState(false);
+  const [backupHistory, setBackupHistory] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -14,12 +18,23 @@ const Settings = () => {
 
   const fetchData = async () => {
     try {
-      const [settingsRes, presetsRes] = await Promise.all([
+      const requests = [
         api.get('/farm-settings'),
         api.get('/farm-settings/crop-presets'),
-      ]);
-      setSettings(settingsRes.data.data);
-      setPresets(presetsRes.data.data);
+      ];
+
+      // Add backup history for admins
+      if (isAdmin) {
+        requests.push(api.get('/backup/history'));
+      }
+
+      const responses = await Promise.all(requests);
+      setSettings(responses[0].data.data);
+      setPresets(responses[1].data.data);
+
+      if (isAdmin && responses[2]) {
+        setBackupHistory(responses[2].data);
+      }
     } catch (error) {
       console.error('Error fetching settings:', error);
       alert('Error loading settings. Make sure backend is running!');
@@ -58,6 +73,38 @@ const Settings = () => {
     }
   };
 
+  const handleBackupDownload = async () => {
+    if (!window.confirm('Download backup database sekarang?')) return;
+
+    try {
+      setBackingUp(true);
+      const response = await api.get('/backup/download', {
+        responseType: 'blob',
+      });
+
+      // Create download link
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `durian_backup_${new Date().toISOString().slice(0, 10)}.sql`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      alert('Database backup berjaya dimuat turun!');
+
+      // Refresh backup history
+      const historyRes = await api.get('/backup/history');
+      setBackupHistory(historyRes.data);
+    } catch (error) {
+      console.error('Backup error:', error);
+      alert('Error creating backup: ' + (error.response?.data?.error || error.message));
+    } finally {
+      setBackingUp(false);
+    }
+  };
+
   if (loading) {
     return <div className="flex justify-center py-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div></div>;
   }
@@ -68,6 +115,57 @@ const Settings = () => {
         <h1 className="text-2xl font-bold text-gray-900">Tetapan Kebun</h1>
         <p className="text-gray-600">Konfigurasi jenis tanaman & tetapan sistem</p>
       </div>
+
+      {/* Database Backup Section - Admin Only */}
+      {isAdmin && (
+        <div className="card">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <Database size={20} className="text-primary-600" />
+                Database Backup
+              </h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Muat turun backup database untuk perlindungan data
+              </p>
+            </div>
+            <button
+              onClick={handleBackupDownload}
+              disabled={backingUp}
+              className="btn-primary flex items-center gap-2"
+            >
+              <Download size={18} />
+              {backingUp ? 'Membuat Backup...' : 'Download Backup'}
+            </button>
+          </div>
+
+          {/* Backup History */}
+          {backupHistory.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                <Clock size={16} />
+                Backup Terkini
+              </h4>
+              <div className="space-y-2">
+                {backupHistory.slice(0, 5).map((backup) => (
+                  <div
+                    key={backup.id}
+                    className="flex justify-between items-center text-sm bg-gray-50 p-2 rounded"
+                  >
+                    <div>
+                      <div className="font-medium text-gray-900">{backup.filename}</div>
+                      <div className="text-xs text-gray-500">
+                        oleh {backup.created_by}
+                      </div>
+                    </div>
+                    <div className="text-xs text-gray-500">{backup.created_at}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="card">
         <h3 className="text-lg font-semibold mb-4">Pilih Jenis Tanaman (Quick Setup)</h3>
