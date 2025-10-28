@@ -18,6 +18,7 @@ import Sales from './pages/Sales';
 import Settings from './pages/Settings';
 import Users from './pages/Users';
 import Reports from './pages/Reports';
+import Security from './pages/Security';
 
 function App() {
   return (
@@ -150,6 +151,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Reports />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/security"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Security />
                 </Layout>
               </ProtectedRoute>
             }

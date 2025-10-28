@@ -19,6 +19,7 @@ import {
   X,
   MoreHorizontal,
   ChevronUp,
+  Shield,
 } from 'lucide-react';
 import OfflineIndicator from './OfflineIndicator';
 
@@ -41,6 +42,7 @@ const Layout = ({ children }) => {
     { name: 'Laporan', path: '/reports', icon: FileText },
     { name: 'Activity Logs', path: '/activity-logs', icon: Activity },
     ...(isAdmin ? [{ name: 'Pengguna', path: '/users', icon: Users }] : []),
+    ...(isAdmin ? [{ name: 'Security', path: '/security', icon: Shield }] : []),
     { name: 'Tetapan', path: '/settings', icon: SettingsIcon },
   ];
 
