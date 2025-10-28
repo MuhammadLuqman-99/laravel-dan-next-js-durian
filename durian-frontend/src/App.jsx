@@ -19,6 +19,7 @@ import Settings from './pages/Settings';
 import Users from './pages/Users';
 import Reports from './pages/Reports';
 import Security from './pages/Security';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -161,6 +162,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Security />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Profile />
                 </Layout>
               </ProtectedRoute>
             }

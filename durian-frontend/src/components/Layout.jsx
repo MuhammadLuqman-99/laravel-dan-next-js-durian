@@ -20,6 +20,7 @@ import {
   MoreHorizontal,
   ChevronUp,
   Shield,
+  User,
 } from 'lucide-react';
 import OfflineIndicator from './OfflineIndicator';
 
@@ -43,6 +44,7 @@ const Layout = ({ children }) => {
     { name: 'Activity Logs', path: '/activity-logs', icon: Activity },
     ...(isAdmin ? [{ name: 'Pengguna', path: '/users', icon: Users }] : []),
     ...(isAdmin ? [{ name: 'Security', path: '/security', icon: Shield }] : []),
+    { name: 'Profile', path: '/profile', icon: User },
     { name: 'Tetapan', path: '/settings', icon: SettingsIcon },
   ];
 
