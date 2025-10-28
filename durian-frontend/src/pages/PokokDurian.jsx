@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { Plus, Edit, Trash2, Search, QrCode, Printer } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, QrCode, Printer, MapPin } from 'lucide-react';
 import QRCodeModal from '../components/QRCodeModal';
 import PhotoGallery from '../components/PhotoGallery';
 import PrintLabelsModal from '../components/PrintLabelsModal';
@@ -32,7 +32,11 @@ const PokokDurian = () => {
     tarikh_tanam: '',
     status_kesihatan: 'sihat',
     catatan: '',
+    latitude: '',
+    longitude: '',
+    gps_accuracy: '',
   });
+  const [capturingGPS, setCapturingGPS] = useState(false);
 
   useEffect(() => {
     fetchPokok(1); // Reset to page 1 when search changes
@@ -112,8 +116,50 @@ const PokokDurian = () => {
       tarikh_tanam: '',
       status_kesihatan: 'sihat',
       catatan: '',
+      latitude: '',
+      longitude: '',
+      gps_accuracy: '',
     });
     setEditMode(false);
+  };
+
+  const captureGPS = () => {
+    if (!navigator.geolocation) {
+      alert('GPS tidak disokong oleh browser anda');
+      return;
+    }
+
+    setCapturingGPS(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setFormData({
+          ...formData,
+          latitude: position.coords.latitude.toFixed(8),
+          longitude: position.coords.longitude.toFixed(8),
+          gps_accuracy: position.coords.accuracy ? `${position.coords.accuracy.toFixed(2)}m` : '',
+          gps_captured_at: new Date().toISOString(),
+        });
+        setCapturingGPS(false);
+        alert(`GPS berjaya diambil!\nLatitude: ${position.coords.latitude.toFixed(6)}\nLongitude: ${position.coords.longitude.toFixed(6)}\nAccuracy: ±${position.coords.accuracy.toFixed(2)}m`);
+      },
+      (error) => {
+        setCapturingGPS(false);
+        let errorMsg = 'Gagal mendapatkan lokasi GPS';
+        if (error.code === 1) {
+          errorMsg = 'Sila benarkan akses lokasi di browser anda';
+        } else if (error.code === 2) {
+          errorMsg = 'Lokasi tidak tersedia. Pastikan GPS dihidupkan.';
+        } else if (error.code === 3) {
+          errorMsg = 'Timeout mendapatkan lokasi GPS';
+        }
+        alert(errorMsg);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
   };
 
   const statusColors = {
@@ -421,6 +467,52 @@ const PokokDurian = () => {
                   value={formData.catatan}
                   onChange={(e) => setFormData({ ...formData, catatan: e.target.value })}
                 ></textarea>
+              </div>
+
+              {/* GPS Coordinates Section */}
+              <div className="col-span-2 border-t pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="label mb-0">Koordinat GPS (Opsional)</label>
+                  <button
+                    type="button"
+                    onClick={captureGPS}
+                    disabled={capturingGPS}
+                    className="btn-secondary text-sm flex items-center gap-2"
+                  >
+                    <MapPin size={16} />
+                    {capturingGPS ? 'Menangkap GPS...' : 'Ambil Lokasi GPS'}
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="label text-sm">Latitude</label>
+                    <input
+                      type="number"
+                      step="0.00000001"
+                      className="input-field"
+                      value={formData.latitude}
+                      onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
+                      placeholder="Contoh: 3.1390"
+                    />
+                  </div>
+                  <div>
+                    <label className="label text-sm">Longitude</label>
+                    <input
+                      type="number"
+                      step="0.00000001"
+                      className="input-field"
+                      value={formData.longitude}
+                      onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
+                      placeholder="Contoh: 101.6869"
+                    />
+                  </div>
+                </div>
+                {formData.latitude && formData.longitude && (
+                  <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-700">
+                    GPS: {parseFloat(formData.latitude).toFixed(6)}, {parseFloat(formData.longitude).toFixed(6)}
+                    {formData.gps_accuracy && ` (±${formData.gps_accuracy})`}
+                  </div>
+                )}
               </div>
               <div className="flex justify-end space-x-3">
                 <button

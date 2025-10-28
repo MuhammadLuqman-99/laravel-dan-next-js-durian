@@ -21,6 +21,7 @@ import {
   ChevronUp,
   Shield,
   User,
+  Map,
 } from 'lucide-react';
 import OfflineIndicator from './OfflineIndicator';
 
@@ -34,6 +35,7 @@ const Layout = ({ children }) => {
   const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: Home },
     { name: 'Tanaman', path: '/pokok', icon: TreeDeciduous },
+    { name: 'Peta Kebun', path: '/peta', icon: Map },
     { name: 'Baja', path: '/baja', icon: Leaf },
     { name: 'Spray/Racun', path: '/spray', icon: Droplet },
     { name: 'Hasil', path: '/hasil', icon: TrendingUp },

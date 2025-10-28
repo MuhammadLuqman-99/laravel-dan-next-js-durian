@@ -8,6 +8,7 @@ import PWAUpdatePrompt from './components/PWAUpdatePrompt';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import PokokDurian from './pages/PokokDurian';
+import FarmMapPage from './pages/FarmMapPage';
 import Baja from './pages/Baja';
 import Hasil from './pages/Hasil';
 import Inspeksi from './pages/Inspeksi';
@@ -52,6 +53,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <PokokDurian />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/peta"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <FarmMapPage />
                 </Layout>
               </ProtectedRoute>
             }
