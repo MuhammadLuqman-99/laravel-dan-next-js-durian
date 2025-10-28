@@ -172,4 +172,52 @@
   .btn-group > button {
     @apply w-full;
   }
+
+  /* Better active states for touch */
+  button:active, a:active {
+    transform: scale(0.98);
+  }
+
+  /* Smooth image loading */
+  img {
+    @apply transition-opacity duration-300;
+  }
+
+  img[loading="lazy"]:not([src]) {
+    @apply opacity-0;
+  }
+}
+
+/* Performance optimizations */
+@layer utilities {
+  /* GPU acceleration for transforms */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Better tap highlight */
+  * {
+    -webkit-tap-highlight-color: rgba(22, 163, 74, 0.1);
+  }
+
+  /* Prevent text selection on buttons */
+  button, .btn-primary, .btn-secondary, .btn-danger {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Safe area for mobile notches */
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
 }

@@ -189,12 +189,16 @@ const PhotoGallery = ({ photoableType, photoableId, allowUpload = true }) => {
         ) : (
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
             {photos.map(photo => (
-              <div key={photo.id} className="relative group aspect-square">
+              <div key={photo.id} className="relative group aspect-square bg-gray-100">
                 <img
                   src={photo.url}
                   alt={photo.file_name}
+                  loading="lazy"
                   className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
                   onClick={() => setViewingPhoto(photo)}
+                  onError={(e) => {
+                    e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23f3f4f6" width="100" height="100"/%3E%3Ctext fill="%239ca3af" x="50%" y="50%" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
+                  }}
                 />
                 {isAdmin && (
                   <button
@@ -229,6 +233,7 @@ const PhotoGallery = ({ photoableType, photoableId, allowUpload = true }) => {
             <img
               src={viewingPhoto.url}
               alt={viewingPhoto.file_name}
+              loading="eager"
               className="max-w-full max-h-[90vh] object-contain"
               onClick={(e) => e.stopPropagation()}
             />
