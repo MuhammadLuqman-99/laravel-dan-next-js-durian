@@ -105,24 +105,58 @@ const PhotoGallery = ({ photoableType, photoableId, allowUpload = true }) => {
           </h3>
 
           {selectedFiles.length === 0 ? (
-            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                <Upload className="w-10 h-10 text-gray-400 mb-2" />
-                <p className="text-sm text-gray-600">
-                  Click to select photos
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  PNG, JPG, GIF up to 5MB each
-                </p>
+            <div className="space-y-3">
+              {/* Camera Capture Button (Mobile Optimized) */}
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-primary-300 bg-primary-50 rounded-lg cursor-pointer hover:bg-primary-100 transition-colors">
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <Camera className="w-12 h-12 text-primary-600 mb-2" />
+                  <p className="text-sm font-semibold text-primary-700">
+                    📸 Ambil Gambar
+                  </p>
+                  <p className="text-xs text-primary-600 mt-1">
+                    Snap foto pokok terus dari kamera
+                  </p>
+                </div>
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  capture="environment"
+                  multiple
+                  onChange={handleFileSelect}
+                />
+              </label>
+
+              {/* OR Divider */}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">atau</span>
+                </div>
               </div>
-              <input
-                type="file"
-                className="hidden"
-                accept="image/*"
-                multiple
-                onChange={handleFileSelect}
-              />
-            </label>
+
+              {/* Gallery Selection */}
+              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <Upload className="w-10 h-10 text-gray-400 mb-2" />
+                  <p className="text-sm text-gray-600">
+                    Pilih dari Gallery
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    PNG, JPG up to 5MB each
+                  </p>
+                </div>
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  multiple
+                  onChange={handleFileSelect}
+                />
+              </label>
+            </div>
           ) : (
             <div className="space-y-3">
               {/* Preview Grid */}

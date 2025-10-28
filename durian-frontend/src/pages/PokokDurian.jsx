@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { Plus, Edit, Trash2, Search, QrCode, Printer, MapPin } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, QrCode, Printer, MapPin, Camera } from 'lucide-react';
 import QRCodeModal from '../components/QRCodeModal';
 import PhotoGallery from '../components/PhotoGallery';
+import QuickPhotoButton from '../components/QuickPhotoButton';
 import PrintLabelsModal from '../components/PrintLabelsModal';
 import Pagination from '../components/Pagination';
 
@@ -355,6 +356,19 @@ const PokokDurian = () => {
                 </div>
 
                 <div className="mobile-card-actions">
+                  <div className="flex-1">
+                    <QuickPhotoButton
+                      photoableType="App\\Models\\PokokDurian"
+                      photoableId={item.id}
+                      onPhotoUploaded={() => fetchPokok(pagination.current_page)}
+                      buttonText={
+                        <div className="flex items-center justify-center gap-2">
+                          <Camera size={20} />
+                          <span>Foto</span>
+                        </div>
+                      }
+                    />
+                  </div>
                   <button
                     onClick={() => {
                       setSelectedPokok(item);
