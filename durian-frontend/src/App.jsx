@@ -3,6 +3,8 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import ErrorBoundary from './components/ErrorBoundary';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
+import PWAUpdatePrompt from './components/PWAUpdatePrompt';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import PokokDurian from './pages/PokokDurian';
@@ -153,6 +155,8 @@ function App() {
             }
           />
         </Routes>
+        <PWAInstallPrompt />
+        <PWAUpdatePrompt />
         </BrowserRouter>
       </AuthProvider>
     </ErrorBoundary>

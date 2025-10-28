@@ -12,12 +12,15 @@ export default defineConfig({
         name: 'Sistem Pengurusan Kebun Durian',
         short_name: 'Durian Farm',
         description: 'Sistem pengurusan kebun durian untuk petani',
-        theme_color: '#2d5016',
+        theme_color: '#16a34a',
         background_color: '#ffffff',
         display: 'standalone',
-        orientation: 'portrait',
+        orientation: 'portrait-primary',
         scope: '/',
         start_url: '/',
+        categories: ['business', 'productivity', 'agriculture'],
+        lang: 'ms-MY',
+        dir: 'ltr',
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -34,6 +37,29 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
+          }
+        ],
+        shortcuts: [
+          {
+            name: 'Dashboard',
+            short_name: 'Dashboard',
+            description: 'View farm dashboard',
+            url: '/',
+            icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }]
+          },
+          {
+            name: 'Pokok',
+            short_name: 'Trees',
+            description: 'Manage durian trees',
+            url: '/pokok',
+            icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }]
+          },
+          {
+            name: 'Inspeksi',
+            short_name: 'Inspect',
+            description: 'Tree inspections',
+            url: '/inspeksi',
+            icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }]
           }
         ]
       },
