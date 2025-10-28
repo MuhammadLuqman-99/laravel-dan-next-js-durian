@@ -4,9 +4,16 @@ import { Plus, Edit, Trash2, Search, QrCode, Printer } from 'lucide-react';
 import QRCodeModal from '../components/QRCodeModal';
 import PhotoGallery from '../components/PhotoGallery';
 import PrintLabelsModal from '../components/PrintLabelsModal';
+import Pagination from '../components/Pagination';
 
 const PokokDurian = () => {
   const [pokok, setPokok] = useState([]);
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    last_page: 1,
+    per_page: 50,
+    total: 0
+  });
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
@@ -28,14 +35,25 @@ const PokokDurian = () => {
   });
 
   useEffect(() => {
-    fetchPokok();
+    fetchPokok(1); // Reset to page 1 when search changes
   }, [search]);
 
-  const fetchPokok = async () => {
+  const fetchPokok = async (page = 1) => {
     try {
-      const params = search ? { search } : {};
+      setLoading(true);
+      const params = {
+        page,
+        per_page: 50, // Request 50 items per page for large farms
+        ...(search && { search })
+      };
       const response = await api.get('/pokok', { params });
       setPokok(response.data.data.data);
+      setPagination({
+        current_page: response.data.data.current_page,
+        last_page: response.data.data.last_page,
+        per_page: response.data.data.per_page,
+        total: response.data.data.total
+      });
     } catch (error) {
       console.error('Error fetching pokok:', error);
       alert('Error loading pokok data. Make sure backend is running!');
@@ -44,6 +62,11 @@ const PokokDurian = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePageChange = (page) => {
+    fetchPokok(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSubmit = async (e) => {
@@ -451,6 +474,16 @@ const PokokDurian = () => {
         mode={printMode}
         treeId={printTreeId}
         selectedTrees={selectedTrees}
+      />
+
+      {/* Pagination */}
+      <Pagination
+        currentPage={pagination.current_page}
+        lastPage={pagination.last_page}
+        total={pagination.total}
+        perPage={pagination.per_page}
+        onPageChange={handlePageChange}
+        loading={loading}
       />
     </div>
   );
