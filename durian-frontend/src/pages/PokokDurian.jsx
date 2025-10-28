@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { Plus, Edit, Trash2, Search, QrCode, Printer, MapPin, Camera } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, QrCode, Printer, MapPin, Camera, CheckSquare, Square, RefreshCw, Download } from 'lucide-react';
 import QRCodeModal from '../components/QRCodeModal';
 import PhotoGallery from '../components/PhotoGallery';
 import QuickPhotoButton from '../components/QuickPhotoButton';
@@ -25,6 +25,9 @@ const PokokDurian = () => {
   const [selectedPokok, setSelectedPokok] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [search, setSearch] = useState('');
+  const [bulkActionMode, setBulkActionMode] = useState(false);
+  const [showBulkUpdateModal, setShowBulkUpdateModal] = useState(false);
+  const [bulkUpdateStatus, setBulkUpdateStatus] = useState('');
   const [formData, setFormData] = useState({
     tag_no: '',
     varieti: '',
@@ -163,6 +166,99 @@ const PokokDurian = () => {
     );
   };
 
+  // Bulk Action Handlers
+  const toggleBulkMode = () => {
+    setBulkActionMode(!bulkActionMode);
+    setSelectedTrees([]);
+  };
+
+  const toggleSelectTree = (treeId) => {
+    setSelectedTrees(prev =>
+      prev.includes(treeId)
+        ? prev.filter(id => id !== treeId)
+        : [...prev, treeId]
+    );
+  };
+
+  const selectAllTrees = () => {
+    if (selectedTrees.length === pokok.length) {
+      setSelectedTrees([]);
+    } else {
+      setSelectedTrees(pokok.map(p => p.id));
+    }
+  };
+
+  const handleBulkUpdateStatus = async () => {
+    if (!bulkUpdateStatus || selectedTrees.length === 0) {
+      alert('Sila pilih status kesihatan');
+      return;
+    }
+
+    try {
+      await api.post('/pokok/bulk-update-status', {
+        tree_ids: selectedTrees,
+        status_kesihatan: bulkUpdateStatus
+      });
+
+      setShowBulkUpdateModal(false);
+      setBulkUpdateStatus('');
+      setSelectedTrees([]);
+      setBulkActionMode(false);
+      fetchPokok(pagination.current_page);
+      alert(`Berjaya update ${selectedTrees.length} pokok!`);
+    } catch (error) {
+      console.error('Error bulk updating:', error);
+      alert('Gagal update status. Sila cuba lagi.');
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedTrees.length === 0) return;
+
+    if (!window.confirm(`Adakah anda pasti untuk memadam ${selectedTrees.length} pokok?`)) {
+      return;
+    }
+
+    try {
+      await api.post('/pokok/bulk-delete', {
+        tree_ids: selectedTrees
+      });
+
+      setSelectedTrees([]);
+      setBulkActionMode(false);
+      fetchPokok(pagination.current_page);
+      alert(`Berjaya delete ${selectedTrees.length} pokok!`);
+    } catch (error) {
+      console.error('Error bulk deleting:', error);
+      alert('Gagal delete. Sila cuba lagi.');
+    }
+  };
+
+  const handleExportCSV = async () => {
+    try {
+      const idsParam = selectedTrees.length > 0
+        ? `?ids=${selectedTrees.join(',')}`
+        : '';
+
+      const response = await api.get(`/pokok/export${idsParam}`, {
+        responseType: 'blob'
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `pokok-durian-${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      alert('Export berjaya!');
+    } catch (error) {
+      console.error('Error exporting:', error);
+      alert('Gagal export. Sila cuba lagi.');
+    }
+  };
+
   const statusColors = {
     sihat: 'badge-success',
     sederhana: 'badge-warning',
@@ -216,28 +312,75 @@ const PokokDurian = () => {
           />
         </div>
 
-        {/* Print Actions */}
+        {/* Bulk Actions Bar */}
         <div className="flex flex-wrap gap-2 pt-3 border-t border-gray-200">
+          {/* Bulk Mode Toggle */}
           <button
-            onClick={() => {
-              setPrintMode('all');
-              setShowPrintModal(true);
-            }}
-            className="btn-secondary text-sm flex items-center gap-2"
+            onClick={toggleBulkMode}
+            className={`text-sm flex items-center gap-2 ${
+              bulkActionMode ? 'btn-primary' : 'btn-secondary'
+            }`}
           >
-            <Printer size={16} />
-            Print All Labels
+            {bulkActionMode ? <CheckSquare size={16} /> : <Square size={16} />}
+            {bulkActionMode ? 'Mode Pilih Aktif' : 'Pilih Banyak'}
           </button>
-          {selectedTrees.length > 0 && (
+
+          {/* Bulk Actions (shown when items selected) */}
+          {bulkActionMode && selectedTrees.length > 0 && (
+            <>
+              <div className="flex items-center text-sm font-medium text-gray-700 px-3 py-2 bg-blue-50 rounded-lg">
+                {selectedTrees.length} dipilih
+              </div>
+
+              <button
+                onClick={() => setShowBulkUpdateModal(true)}
+                className="btn-secondary text-sm flex items-center gap-2"
+              >
+                <RefreshCw size={16} />
+                Update Status
+              </button>
+
+              <button
+                onClick={handleBulkDelete}
+                className="btn-danger text-sm flex items-center gap-2"
+              >
+                <Trash2 size={16} />
+                Delete
+              </button>
+
+              <button
+                onClick={() => {
+                  setPrintMode('batch');
+                  setShowPrintModal(true);
+                }}
+                className="btn-secondary text-sm flex items-center gap-2"
+              >
+                <Printer size={16} />
+                Print Labels
+              </button>
+            </>
+          )}
+
+          {/* Export Button */}
+          <button
+            onClick={handleExportCSV}
+            className="btn-secondary text-sm flex items-center gap-2 ml-auto"
+          >
+            <Download size={16} />
+            {selectedTrees.length > 0 ? `Export ${selectedTrees.length}` : 'Export All'}
+          </button>
+
+          {/* Print All (when not in bulk mode) */}
+          {!bulkActionMode && (
             <button
               onClick={() => {
-                setPrintMode('batch');
+                setPrintMode('all');
                 setShowPrintModal(true);
               }}
-              className="btn-primary text-sm flex items-center gap-2"
+              className="btn-secondary text-sm flex items-center gap-2"
             >
               <Printer size={16} />
-              Print Selected ({selectedTrees.length})
+              Print All Labels
             </button>
           )}
         </div>
@@ -258,6 +401,16 @@ const PokokDurian = () => {
               <table className="table">
                 <thead>
                   <tr>
+                    {bulkActionMode && (
+                      <th className="w-12">
+                        <input
+                          type="checkbox"
+                          checked={selectedTrees.length === pokok.length && pokok.length > 0}
+                          onChange={selectAllTrees}
+                          className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                        />
+                      </th>
+                    )}
                     <th>Tag No</th>
                     <th>Varieti</th>
                     <th>Umur</th>
@@ -269,7 +422,22 @@ const PokokDurian = () => {
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {pokok.map((item) => (
-                    <tr key={item.id}>
+                    <tr
+                      key={item.id}
+                      className={`${
+                        selectedTrees.includes(item.id) ? 'bg-blue-50' : ''
+                      } hover:bg-gray-50 transition-colors`}
+                    >
+                      {bulkActionMode && (
+                        <td>
+                          <input
+                            type="checkbox"
+                            checked={selectedTrees.includes(item.id)}
+                            onChange={() => toggleSelectTree(item.id)}
+                            className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                          />
+                        </td>
+                      )}
                       <td className="font-medium">{item.tag_no}</td>
                       <td>{item.varieti}</td>
                       <td>{item.umur} tahun</td>
@@ -327,11 +495,26 @@ const PokokDurian = () => {
           {/* Mobile Cards */}
           <div className="md:hidden space-y-3">
             {pokok.map((item) => (
-              <div key={item.id} className="mobile-card">
+              <div
+                key={item.id}
+                className={`mobile-card ${
+                  selectedTrees.includes(item.id) ? 'ring-2 ring-primary-500 bg-blue-50' : ''
+                }`}
+              >
                 <div className="mobile-card-header">
-                  <div>
-                    <div className="mobile-card-title">{item.tag_no}</div>
-                    <div className="text-xs text-gray-500 mt-1">{item.varieti}</div>
+                  <div className="flex items-center gap-3">
+                    {bulkActionMode && (
+                      <input
+                        type="checkbox"
+                        checked={selectedTrees.includes(item.id)}
+                        onChange={() => toggleSelectTree(item.id)}
+                        className="w-5 h-5 text-primary-600 rounded focus:ring-primary-500"
+                      />
+                    )}
+                    <div>
+                      <div className="mobile-card-title">{item.tag_no}</div>
+                      <div className="text-xs text-gray-500 mt-1">{item.varieti}</div>
+                    </div>
                   </div>
                   <span className={`badge ${statusColors[item.status_kesihatan]}`}>
                     {item.status_kesihatan}
@@ -581,6 +764,58 @@ const PokokDurian = () => {
         treeId={printTreeId}
         selectedTrees={selectedTrees}
       />
+
+      {/* Bulk Update Status Modal */}
+      {showBulkUpdateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+              <RefreshCw size={24} className="text-primary-600" />
+              Update Status Kesihatan
+            </h2>
+
+            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800">
+                {selectedTrees.length} pokok dipilih untuk update status
+              </p>
+            </div>
+
+            <div className="mb-6">
+              <label className="label">Status Kesihatan Baru</label>
+              <select
+                className="input-field"
+                value={bulkUpdateStatus}
+                onChange={(e) => setBulkUpdateStatus(e.target.value)}
+              >
+                <option value="">Pilih Status</option>
+                <option value="sihat">Sihat</option>
+                <option value="sederhana">Sederhana</option>
+                <option value="kurang sihat">Kurang Sihat</option>
+                <option value="kritikal">Kritikal</option>
+              </select>
+            </div>
+
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setShowBulkUpdateModal(false);
+                  setBulkUpdateStatus('');
+                }}
+                className="btn-secondary"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleBulkUpdateStatus}
+                disabled={!bulkUpdateStatus}
+                className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Update {selectedTrees.length} Pokok
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Pagination */}
       <Pagination
