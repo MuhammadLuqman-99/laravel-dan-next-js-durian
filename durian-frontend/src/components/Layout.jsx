@@ -19,36 +19,102 @@ import {
   X,
   MoreHorizontal,
   ChevronUp,
+  ChevronDown,
   Shield,
   User,
   Map,
+  Sprout,
+  Wrench,
+  Wallet,
+  UserCog,
 } from 'lucide-react';
 import OfflineIndicator from './OfflineIndicator';
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({
+    farm: true,
+    operations: true,
+    finance: true,
+    admin: false,
+  });
   const { user, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const menuItems = [
-    { name: 'Dashboard', path: '/dashboard', icon: Home },
-    { name: 'Tanaman', path: '/pokok', icon: TreeDeciduous },
-    { name: 'Peta Kebun', path: '/peta', icon: Map },
-    { name: 'Baja', path: '/baja', icon: Leaf },
-    { name: 'Spray/Racun', path: '/spray', icon: Droplet },
-    { name: 'Hasil', path: '/hasil', icon: TrendingUp },
-    { name: 'Inspeksi', path: '/inspeksi', icon: Stethoscope },
-    { name: 'Jualan', path: '/sales', icon: ShoppingCart },
-    { name: 'Perbelanjaan', path: '/expenses', icon: DollarSign },
-    { name: 'Laporan', path: '/reports', icon: FileText },
-    { name: 'Activity Logs', path: '/activity-logs', icon: Activity },
-    ...(isAdmin ? [{ name: 'Pengguna', path: '/users', icon: Users }] : []),
-    ...(isAdmin ? [{ name: 'Security', path: '/security', icon: Shield }] : []),
-    { name: 'Profile', path: '/profile', icon: User },
-    { name: 'Tetapan', path: '/settings', icon: SettingsIcon },
+  const toggleSection = (section) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
+  const menuSections = [
+    {
+      id: 'dashboard',
+      type: 'single',
+      name: 'Dashboard',
+      path: '/dashboard',
+      icon: Home,
+    },
+    {
+      id: 'farm',
+      type: 'section',
+      name: 'Pengurusan Kebun',
+      icon: Sprout,
+      items: [
+        { name: 'Tanaman', path: '/pokok', icon: TreeDeciduous },
+        { name: 'Peta Kebun', path: '/peta', icon: Map },
+        { name: 'Inspeksi', path: '/inspeksi', icon: Stethoscope },
+      ]
+    },
+    {
+      id: 'operations',
+      type: 'section',
+      name: 'Operasi',
+      icon: Wrench,
+      items: [
+        { name: 'Baja', path: '/baja', icon: Leaf },
+        { name: 'Spray/Racun', path: '/spray', icon: Droplet },
+        { name: 'Hasil', path: '/hasil', icon: TrendingUp },
+      ]
+    },
+    {
+      id: 'finance',
+      type: 'section',
+      name: 'Kewangan',
+      icon: Wallet,
+      items: [
+        { name: 'Jualan', path: '/sales', icon: ShoppingCart },
+        { name: 'Perbelanjaan', path: '/expenses', icon: DollarSign },
+        { name: 'Laporan', path: '/reports', icon: FileText },
+      ]
+    },
+    {
+      id: 'admin',
+      type: 'section',
+      name: 'Pentadbiran',
+      icon: UserCog,
+      items: [
+        { name: 'Activity Logs', path: '/activity-logs', icon: Activity },
+        ...(isAdmin ? [{ name: 'Pengguna', path: '/users', icon: Users }] : []),
+        ...(isAdmin ? [{ name: 'Security', path: '/security', icon: Shield }] : []),
+        { name: 'Profile', path: '/profile', icon: User },
+        { name: 'Tetapan', path: '/settings', icon: SettingsIcon },
+      ]
+    },
   ];
+
+  // Flatten menu sections for mobile nav
+  const flatMenuItems = menuSections.reduce((acc, section) => {
+    if (section.type === 'single') {
+      acc.push(section);
+    } else {
+      acc.push(...section.items);
+    }
+    return acc;
+  }, []);
 
   const handleLogout = async () => {
     await logout();
@@ -79,24 +145,80 @@ const Layout = ({ children }) => {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path;
+          <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+            {menuSections.map((section) => {
+              if (section.type === 'single') {
+                const Icon = section.icon;
+                const isActive = location.pathname === section.path;
+                return (
+                  <Link
+                    key={section.path}
+                    to={section.path}
+                    className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+                      isActive
+                        ? 'bg-primary-50 text-primary-600'
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <Icon size={20} className="mr-3" />
+                    <span className="font-medium">{section.name}</span>
+                  </Link>
+                );
+              }
+
+              // Section with sub-items
+              const SectionIcon = section.icon;
+              const isExpanded = expandedSections[section.id];
+              const hasActiveItem = section.items.some(item => location.pathname === item.path);
+
               return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                    isActive
-                      ? 'bg-primary-50 text-primary-600'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <Icon size={20} className="mr-3" />
-                  <span className="font-medium">{item.name}</span>
-                </Link>
+                <div key={section.id} className="space-y-1">
+                  {/* Section Header */}
+                  <button
+                    onClick={() => toggleSection(section.id)}
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors ${
+                      hasActiveItem
+                        ? 'bg-primary-50 text-primary-600'
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <SectionIcon size={20} className="mr-3" />
+                      <span className="font-medium">{section.name}</span>
+                    </div>
+                    {isExpanded ? (
+                      <ChevronUp size={16} className="text-gray-500" />
+                    ) : (
+                      <ChevronDown size={16} className="text-gray-500" />
+                    )}
+                  </button>
+
+                  {/* Sub-items */}
+                  {isExpanded && (
+                    <div className="ml-4 space-y-1">
+                      {section.items.map((item) => {
+                        const ItemIcon = item.icon;
+                        const isActive = location.pathname === item.path;
+                        return (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            className={`flex items-center px-4 py-2.5 rounded-lg transition-colors text-sm ${
+                              isActive
+                                ? 'bg-primary-100 text-primary-700'
+                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                            }`}
+                            onClick={() => setSidebarOpen(false)}
+                          >
+                            <ItemIcon size={18} className="mr-3" />
+                            <span className="font-medium">{item.name}</span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               );
             })}
           </nav>
@@ -189,7 +311,7 @@ const Layout = ({ children }) => {
                   </button>
                 </div>
                 <div className="py-2 space-y-1">
-                  {menuItems.slice(4).map((item) => {
+                  {flatMenuItems.slice(4).map((item) => {
                     const Icon = item.icon;
                     const isActive = location.pathname === item.path;
                     return (
@@ -217,7 +339,7 @@ const Layout = ({ children }) => {
         {/* Bottom Nav Items */}
         <div className="grid grid-cols-5 gap-1 px-2 py-2">
           {/* First 4 main menu items */}
-          {menuItems.slice(0, 4).map((item) => {
+          {flatMenuItems.slice(0, 4).map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
             return (
