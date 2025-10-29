@@ -1,0 +1,86 @@
+====================================================
+RENDER.COM ENVIRONMENT VARIABLES - COPY & PASTE
+====================================================
+
+📋 CARA GUNA:
+1. Create PostgreSQL database dulu di Render
+2. Copy credentials database (hostname, username, password)
+3. Replace values yang ada "REPLACE_WITH_YOUR_XXX"
+4. Copy semua text bawah ni
+5. Kat Render form, click "Add from .env"
+6. Paste semua
+7. Click "Add Variables"
+
+====================================================
+
+APP_NAME=Sistem Pengurusan Kebun Durian
+APP_ENV=production
+APP_KEY=base64:vabbjA2+lNhmtQPizxi1d/LpNd3BZuvVw1KzIwZUMYM=
+APP_DEBUG=false
+APP_URL=https://durian-backend.onrender.com
+APP_LOCALE=en
+APP_FALLBACK_LOCALE=en
+BCRYPT_ROUNDS=12
+LOG_CHANNEL=stderr
+LOG_LEVEL=error
+DB_CONNECTION=pgsql
+DB_HOST=REPLACE_WITH_YOUR_DATABASE_HOSTNAME
+DB_PORT=5432
+DB_DATABASE=REPLACE_WITH_YOUR_DATABASE_NAME
+DB_USERNAME=REPLACE_WITH_YOUR_DATABASE_USERNAME
+DB_PASSWORD=REPLACE_WITH_YOUR_DATABASE_PASSWORD
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=false
+CACHE_STORE=file
+QUEUE_CONNECTION=sync
+FILESYSTEM_DISK=public
+MAIL_MAILER=log
+MAIL_FROM_ADDRESS=noreply@durianfarm.com
+MAIL_FROM_NAME=Sistem Pengurusan Kebun Durian
+FRONTEND_URL=http://localhost:5173
+SANCTUM_STATEFUL_DOMAINS=localhost:5173,.vercel.app
+CORS_ALLOWED_ORIGINS=http://localhost:5173,https://*.vercel.app
+
+====================================================
+DATABASE CREDENTIALS TO REPLACE:
+====================================================
+
+After creating PostgreSQL database di Render, awak akan dapat:
+
+DB_HOST=dpg-xxxxx-a.singapore-postgres.render.com
+      ↑ Copy "Hostname" dari database page
+
+DB_DATABASE=durian_db_xxxxx
+           ↑ Copy "Database" dari database page
+
+DB_USERNAME=durian_db_xxxxx_user
+           ↑ Copy "Username" dari database page
+
+DB_PASSWORD=very_long_random_string_here
+           ↑ Copy "Password" dari database page
+
+====================================================
+EXAMPLE (After replacing):
+====================================================
+
+DB_CONNECTION=pgsql
+DB_HOST=dpg-abc123xyz-a.singapore-postgres.render.com
+DB_PORT=5432
+DB_DATABASE=durian_db_kl8m
+DB_USERNAME=durian_db_kl8m_user
+DB_PASSWORD=Abc123XyzDef456GhiJkl789MnoPqr
+
+====================================================
+AFTER DEPLOY FRONTEND TO VERCEL:
+====================================================
+
+Update these 3 variables:
+
+FRONTEND_URL=https://your-app-name.vercel.app
+SANCTUM_STATEFUL_DOMAINS=your-app-name.vercel.app,.vercel.app
+CORS_ALLOWED_ORIGINS=https://your-app-name.vercel.app,https://*.vercel.app
+
+Then click "Save Changes" di Render - it will auto-redeploy.
+
+====================================================
