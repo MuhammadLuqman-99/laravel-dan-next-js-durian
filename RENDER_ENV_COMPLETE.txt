@@ -1,0 +1,81 @@
+====================================================
+RENDER.COM - COMPLETE ENVIRONMENT VARIABLES
+Database credentials dah filled! ✅
+====================================================
+COPY SEMUA bawah ni dan paste ke Render Web Service
+Guna "Add from .env" button
+====================================================
+
+APP_NAME=Sistem Pengurusan Kebun Durian
+APP_ENV=production
+APP_KEY=base64:vabbjA2+lNhmtQPizxi1d/LpNd3BZuvVw1KzIwZUMYM=
+APP_DEBUG=false
+APP_URL=https://durian-backend.onrender.com
+APP_LOCALE=en
+APP_FALLBACK_LOCALE=en
+BCRYPT_ROUNDS=12
+LOG_CHANNEL=stderr
+LOG_LEVEL=error
+LOG_STACK=single
+
+DB_CONNECTION=pgsql
+DB_HOST=dpg-d3uptqbe5dus739s3430-a
+DB_PORT=5432
+DB_DATABASE=durian_farm
+DB_USERNAME=durian_farm_user
+DB_PASSWORD=F6BEyoBIRoJofL1TZaLTH0UoYX4AJzdr
+
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=false
+SESSION_PATH=/
+SESSION_DOMAIN=
+
+CACHE_STORE=file
+QUEUE_CONNECTION=sync
+BROADCAST_CONNECTION=log
+FILESYSTEM_DISK=public
+
+MAIL_MAILER=log
+MAIL_SCHEME=null
+MAIL_HOST=127.0.0.1
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_FROM_ADDRESS=noreply@durianfarm.com
+MAIL_FROM_NAME=Sistem Pengurusan Kebun Durian
+
+FRONTEND_URL=http://localhost:5173
+SANCTUM_STATEFUL_DOMAINS=localhost:5173,.vercel.app
+CORS_ALLOWED_ORIGINS=http://localhost:5173,https://*.vercel.app
+
+VITE_APP_NAME=Sistem Pengurusan Kebun Durian
+
+====================================================
+✅ SEMUA DAH SIAP! TINGGAL COPY & PASTE JE!
+====================================================
+
+Database Connection:
+✅ Host: dpg-d3uptqbe5dus739s3430-a (Internal hostname - faster!)
+✅ Port: 5432
+✅ Database: durian_farm
+✅ User: durian_farm_user
+✅ Password: F6BEyoBIRoJofL1TZaLTH0UoYX4AJzdr
+
+====================================================
+CARA GUNA:
+====================================================
+
+1. Go to Render Dashboard
+2. New + → Web Service
+3. Connect repo: laravel-dan-next-js-durian
+4. Fill form (see below for exact values)
+5. Scroll to "Environment Variables"
+6. Click "Add from .env"
+7. PASTE SEMUA text kat atas ni
+8. Click "Add Variables"
+9. Scroll down → "Create Web Service"
+10. Wait 5-10 minutes for build
+11. Done! ✅
+
+====================================================

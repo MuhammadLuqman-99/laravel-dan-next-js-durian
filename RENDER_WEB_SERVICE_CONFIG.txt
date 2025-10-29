@@ -1,0 +1,120 @@
+====================================================
+RENDER WEB SERVICE CONFIGURATION
+Fill form dengan EXACT values ni
+====================================================
+
+📍 STEP 1: CREATE WEB SERVICE
+====================================================
+
+Go to: https://dashboard.render.com
+Click: New + → Web Service
+Connect repository: laravel-dan-next-js-durian
+Click: "Connect"
+
+====================================================
+📋 STEP 2: BASIC SETTINGS
+====================================================
+
+Name:
+durian-backend
+
+Region:
+Singapore (Southeast Asia)
+
+Branch:
+main
+
+Root Directory:
+durian-backend
+
+====================================================
+🐳 STEP 3: BUILD SETTINGS (Docker)
+====================================================
+
+Environment:
+Docker
+
+Dockerfile Path:
+./Dockerfile
+
+Docker Build Context Directory:
+.
+
+Docker Command:
+(Leave BLANK - let Dockerfile CMD handle it)
+
+====================================================
+💰 STEP 4: INSTANCE TYPE
+====================================================
+
+Instance Type:
+Free ($0/month)
+
+====================================================
+🔐 STEP 5: ENVIRONMENT VARIABLES
+====================================================
+
+Click: "Add from .env"
+
+Then COPY & PASTE everything from:
+RENDER_ENV_COMPLETE.txt
+
+(Semua 30+ variables akan auto-populate!)
+
+Click: "Add Variables"
+
+====================================================
+⚙️ STEP 6: ADVANCED (Optional)
+====================================================
+
+Health Check Path:
+/
+
+Pre-Deploy Command:
+(Leave BLANK)
+
+Auto-Deploy:
+✅ On (enabled)
+
+====================================================
+🚀 STEP 7: DEPLOY!
+====================================================
+
+Scroll to bottom
+Click: "Create Web Service"
+
+Wait 5-10 minutes...
+
+Expected logs:
+==> Building Docker image
+==> Installing Composer dependencies
+==> Running migrations
+==> Server started on 0.0.0.0:10000
+✅ Your service is live!
+
+====================================================
+✅ SUCCESS URL
+====================================================
+
+Your API will be at:
+https://durian-backend.onrender.com
+
+Test with:
+curl https://durian-backend.onrender.com
+
+====================================================
+📝 QUICK CHECKLIST
+====================================================
+
+□ Name: durian-backend
+□ Region: Singapore
+□ Branch: main
+□ Root Directory: durian-backend
+□ Environment: Docker
+□ Instance: Free
+□ ENV Variables: Pasted from RENDER_ENV_COMPLETE.txt
+□ Click "Create Web Service"
+□ Wait for build
+□ Test API
+
+====================================================

@@ -1,0 +1,81 @@
+====================================================
+RENDER.COM - ENVIRONMENT VARIABLES (READY TO USE)
+====================================================
+Copy & Paste SEMUA bawah ni ke Render
+"Add from .env" button
+====================================================
+
+APP_NAME=Sistem Pengurusan Kebun Durian
+APP_ENV=production
+APP_KEY=base64:vabbjA2+lNhmtQPizxi1d/LpNd3BZuvVw1KzIwZUMYM=
+APP_DEBUG=false
+APP_URL=https://durian-backend.onrender.com
+APP_LOCALE=en
+APP_FALLBACK_LOCALE=en
+BCRYPT_ROUNDS=12
+LOG_CHANNEL=stderr
+LOG_LEVEL=error
+LOG_STACK=single
+
+DB_CONNECTION=pgsql
+DB_HOST=
+DB_PORT=5432
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
+
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=false
+SESSION_PATH=/
+SESSION_DOMAIN=
+
+CACHE_STORE=file
+QUEUE_CONNECTION=sync
+BROADCAST_CONNECTION=log
+FILESYSTEM_DISK=public
+
+MAIL_MAILER=log
+MAIL_SCHEME=null
+MAIL_HOST=127.0.0.1
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_FROM_ADDRESS=noreply@durianfarm.com
+MAIL_FROM_NAME=Sistem Pengurusan Kebun Durian
+
+FRONTEND_URL=http://localhost:5173
+SANCTUM_STATEFUL_DOMAINS=localhost:5173,.vercel.app
+CORS_ALLOWED_ORIGINS=http://localhost:5173,https://*.vercel.app
+
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=ap-southeast-1
+AWS_BUCKET=
+AWS_USE_PATH_STYLE_ENDPOINT=false
+
+VITE_APP_NAME=Sistem Pengurusan Kebun Durian
+
+====================================================
+⚠️ IMPORTANT: DATABASE VALUES KOSONG!
+====================================================
+
+After create PostgreSQL database di Render, UPDATE these:
+
+DB_HOST=[copy Hostname from Render database page]
+DB_DATABASE=[copy Database name]
+DB_USERNAME=[copy Username]
+DB_PASSWORD=[copy Password]
+
+Then go to Render service → Environment → Edit variables
+Update the 4 DB_ values above
+Click "Save Changes"
+
+====================================================
+✅ SEMUA VALUES LAIN DAH FILLED!
+====================================================
+
+Yang kosong cuma database credentials je.
+Semua settings lain (session, cache, mail, CORS) dah siap!
+
+====================================================
