@@ -125,9 +125,9 @@ Email: admin@durian.com
 Password: password
 
 Database:
-Host: dpg-d3uptqbe5dus739s3430-a.singapore-postgres.render.com
+Host: your-database-host.render.com
 Database: durian_farm
-User: durian_farm_user
+User: your-database-user
 Password: (see BACKUP.md)
 ```
 

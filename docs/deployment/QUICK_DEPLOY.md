@@ -41,7 +41,7 @@ Deploy full-stack app dalam 10 minit je!
 
 5. **Environment Variables** - Add these:
    ```
-   APP_KEY = base64:eorA23r9mmfKGsqDN4xDCWJ7nywyrp/ExaGK+KBAnYE=
+   APP_KEY = base64:[YOUR_APP_KEY]
    APP_ENV = production
    APP_DEBUG = false
 

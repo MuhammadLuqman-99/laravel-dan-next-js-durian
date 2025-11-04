@@ -31,11 +31,11 @@ Create a cron job to backup weekly:
 # backup-db.sh
 #!/bin/bash
 
-# Database credentials
-DB_HOST="dpg-d3uptqbe5dus739s3430-a.singapore-postgres.render.com"
+# Database credentials (get from Render Dashboard)
+DB_HOST="your-database-host.render.com"
 DB_NAME="durian_farm"
-DB_USER="durian_farm_user"
-DB_PASS="F6BEyoBIRoJofL1TZaLTH0UoYX4AJzdr"
+DB_USER="your-database-user"
+DB_PASS="your-database-password"
 
 # Backup filename with date
 BACKUP_FILE="durian_farm_backup_$(date +%Y%m%d_%H%M%S).sql"
@@ -211,24 +211,26 @@ Free 12 months:
 1. Download pgAdmin: https://www.pgadmin.org/
 2. Add new server:
    ```
-   Host: dpg-d3uptqbe5dus739s3430-a.singapore-postgres.render.com
+   Host: your-database-host.render.com
    Port: 5432
    Database: durian_farm
-   Username: durian_farm_user
-   Password: F6BEyoBIRoJofL1TZaLTH0UoYX4AJzdr
+   Username: your-database-user
+   Password: your-database-password
    ```
+   (Get credentials from Render Dashboard → PostgreSQL → Connection Info)
 3. Right-click database → **Backup**
 4. Save file
 
 ### Via Command Line:
 ```bash
-PGPASSWORD=F6BEyoBIRoJofL1TZaLTH0UoYX4AJzdr pg_dump \
-  -h dpg-d3uptqbe5dus739s3430-a.singapore-postgres.render.com \
-  -U durian_farm_user \
+PGPASSWORD=your-database-password pg_dump \
+  -h your-database-host.render.com \
+  -U your-database-user \
   -d durian_farm \
   -F c \
   -f durian_farm_backup.dump
 ```
+Replace with your actual credentials from Render Dashboard.
 
 ---
 

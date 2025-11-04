@@ -25,16 +25,16 @@ Go to **Environment** tab, add SEMUA ini:
 #### 🔴 WAJIB (Must Have):
 
 ```
-APP_KEY = base64:eorA23r9mmfKGsqDN4xDCWJ7nywyrp/ExaGK+KBAnYE=
+APP_KEY = base64:[YOUR_APP_KEY]
 APP_ENV = production
 APP_DEBUG = false
 
 DB_CONNECTION = pgsql
-DB_HOST = dpg-d3uptqbe5dus739s3430-a.singapore-postgres.render.com
+DB_HOST = your-database-host.render.com
 DB_PORT = 5432
 DB_DATABASE = durian_farm
-DB_USERNAME = durian_farm_user
-DB_PASSWORD = F6BEyoBIRoJofL1TZaLTH0UoYX4AJzdr
+DB_USERNAME = your-database-user
+DB_PASSWORD = [YOUR_DB_PASSWORD]
 ```
 
 #### 🟡 Recommended:
@@ -200,7 +200,7 @@ Value: production
 
 -------------------
 Key: APP_KEY
-Value: base64:eorA23r9mmfKGsqDN4xDCWJ7nywyrp/ExaGK+KBAnYE=
+Value: base64:[YOUR_APP_KEY]
 -------------------
 
 -------------------
@@ -230,7 +230,7 @@ Value: pgsql
 
 -------------------
 Key: DB_HOST
-Value: dpg-d3uptqbe5dus739s3430-a.singapore-postgres.render.com
+Value: your-database-host.render.com
 -------------------
 
 -------------------
@@ -245,12 +245,12 @@ Value: durian_farm
 
 -------------------
 Key: DB_USERNAME
-Value: durian_farm_user
+Value: your-database-user
 -------------------
 
 -------------------
 Key: DB_PASSWORD
-Value: F6BEyoBIRoJofL1TZaLTH0UoYX4AJzdr
+Value: [YOUR_DB_PASSWORD]
 -------------------
 
 -------------------
@@ -335,7 +335,7 @@ IMPORTANT NOTES:
 
 2. GANTI "your-frontend.vercel.app" dengan URL frontend anda nanti
 
-3. APP_KEY sudah generated: base64:eorA23r9mmfKGsqDN4xDCWJ7nywyrp/ExaGK+KBAnYE=
+3. APP_KEY sudah generated: base64:[YOUR_APP_KEY]
    JANGAN ubah atau regenerate!
 
 4. Database credentials dah betul untuk PostgreSQL yang anda create
@@ -374,11 +374,11 @@ IMPORTANT NOTES:
 **Solution**: Check database credentials:
 ```
 DB_CONNECTION=pgsql
-DB_HOST=dpg-d3uptqbe5dus739s3430-a.singapore-postgres.render.com
+DB_HOST=your-database-host.render.com
 DB_PORT=5432
 DB_DATABASE=durian_farm
-DB_USERNAME=durian_farm_user
-DB_PASSWORD=F6BEyoBIRoJofL1TZaLTH0UoYX4AJzdr
+DB_USERNAME=your-database-user
+DB_PASSWORD=[YOUR_DB_PASSWORD]
 ```
 
 **PENTING**: Guna **Internal Database URL** (yang dpg-xxx-a), BUKAN External URL!
@@ -561,11 +561,11 @@ Go to Render Dashboard → Your Service → Environment, add these:
 ✅ LOG_LEVEL=info
 
 ✅ DB_CONNECTION=pgsql
-✅ DB_HOST=dpg-d3uptqbe5dus739s3430-a.singapore-postgres.render.com
+✅ DB_HOST=your-database-host.render.com
 ✅ DB_PORT=5432
 ✅ DB_DATABASE=durian_farm
-✅ DB_USERNAME=durian_farm_user
-✅ DB_PASSWORD=F6BEyoBIRoJofL1TZaLTH0UoYX4AJzdr
+✅ DB_USERNAME=your-database-user
+✅ DB_PASSWORD=[YOUR_DB_PASSWORD]
 
 ✅ SESSION_DRIVER=database
 ✅ CACHE_STORE=database

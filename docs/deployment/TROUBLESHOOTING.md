@@ -11,7 +11,7 @@ Common issues dan solutions.
 
 **Fix**:
 1. Go to Render → Environment
-2. Add: `APP_KEY=base64:eorA23r9mmfKGsqDN4xDCWJ7nywyrp/ExaGK+KBAnYE=`
+2. Add: `APP_KEY=base64:[YOUR_APP_KEY]`
 3. Save → Redeploy
 
 ---
