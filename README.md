@@ -7,6 +7,8 @@
 [![Frontend](https://img.shields.io/badge/frontend-React-blue)](https://react.dev)
 [![Database](https://img.shields.io/badge/database-PostgreSQL-blue)](https://postgresql.org)
 
+> **⚠️ Demo Project**: This repository contains a demonstration system with sample data for portfolio and showcase purposes. Not intended for production use with real farm data.
+
 ---
 
 ## 🚀 Quick Start
