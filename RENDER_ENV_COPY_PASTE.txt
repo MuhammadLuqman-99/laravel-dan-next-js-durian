@@ -1,0 +1,164 @@
+========================================
+RENDER ENVIRONMENT VARIABLES
+Copy Paste Format - Satu persatu
+========================================
+
+Pergi ke: Render Dashboard > Your Web Service > Environment > Add Environment Variable
+
+Copy paste key dan value untuk setiap baris:
+
+-------------------
+Key: APP_NAME
+Value: Durian Farm System
+-------------------
+
+-------------------
+Key: APP_ENV
+Value: production
+-------------------
+
+-------------------
+Key: APP_KEY
+Value: base64:eorA23r9mmfKGsqDN4xDCWJ7nywyrp/ExaGK+KBAnYE=
+-------------------
+
+-------------------
+Key: APP_DEBUG
+Value: false
+-------------------
+
+-------------------
+Key: APP_URL
+Value: https://your-app-name.onrender.com
+-------------------
+
+-------------------
+Key: LOG_CHANNEL
+Value: stderr
+-------------------
+
+-------------------
+Key: LOG_LEVEL
+Value: info
+-------------------
+
+-------------------
+Key: DB_CONNECTION
+Value: pgsql
+-------------------
+
+-------------------
+Key: DB_HOST
+Value: dpg-d3uptqbe5dus739s3430-a.singapore-postgres.render.com
+-------------------
+
+-------------------
+Key: DB_PORT
+Value: 5432
+-------------------
+
+-------------------
+Key: DB_DATABASE
+Value: durian_farm
+-------------------
+
+-------------------
+Key: DB_USERNAME
+Value: durian_farm_user
+-------------------
+
+-------------------
+Key: DB_PASSWORD
+Value: F6BEyoBIRoJofL1TZaLTH0UoYX4AJzdr
+-------------------
+
+-------------------
+Key: SESSION_DRIVER
+Value: database
+-------------------
+
+-------------------
+Key: SESSION_LIFETIME
+Value: 120
+-------------------
+
+-------------------
+Key: SESSION_ENCRYPT
+Value: false
+-------------------
+
+-------------------
+Key: SESSION_PATH
+Value: /
+-------------------
+
+-------------------
+Key: SESSION_DOMAIN
+Value: .onrender.com
+-------------------
+
+-------------------
+Key: CACHE_STORE
+Value: database
+-------------------
+
+-------------------
+Key: QUEUE_CONNECTION
+Value: database
+-------------------
+
+-------------------
+Key: BROADCAST_CONNECTION
+Value: log
+-------------------
+
+-------------------
+Key: FILESYSTEM_DISK
+Value: local
+-------------------
+
+-------------------
+Key: MAIL_MAILER
+Value: log
+-------------------
+
+-------------------
+Key: MAIL_FROM_ADDRESS
+Value: noreply@durianfarm.com
+-------------------
+
+-------------------
+Key: BCRYPT_ROUNDS
+Value: 12
+-------------------
+
+========================================
+OPTIONAL (Kalau nak frontend integration)
+========================================
+
+-------------------
+Key: SANCTUM_STATEFUL_DOMAINS
+Value: localhost,127.0.0.1,your-frontend.vercel.app
+-------------------
+
+-------------------
+Key: CORS_ALLOWED_ORIGINS
+Value: https://your-frontend.vercel.app,http://localhost:5173
+-------------------
+
+========================================
+IMPORTANT NOTES:
+========================================
+
+1. GANTI "your-app-name.onrender.com" dengan nama service Render anda yang sebenar
+
+2. GANTI "your-frontend.vercel.app" dengan URL frontend anda nanti
+
+3. APP_KEY sudah generated: base64:eorA23r9mmfKGsqDN4xDCWJ7nywyrp/ExaGK+KBAnYE=
+   JANGAN ubah atau regenerate!
+
+4. Database credentials dah betul untuk PostgreSQL yang anda create
+
+5. Lepas add semua env variables, click "Save Changes" kat Render
+
+========================================

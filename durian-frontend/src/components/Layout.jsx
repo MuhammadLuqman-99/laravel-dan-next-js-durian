@@ -27,6 +27,7 @@ import {
   Wrench,
   Wallet,
   UserCog,
+  Mountain,
 } from 'lucide-react';
 import OfflineIndicator from './OfflineIndicator';
 
@@ -35,6 +36,7 @@ const Layout = ({ children }) => {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
     farm: true,
+    busut: true,
     operations: true,
     finance: true,
     admin: false,
@@ -67,6 +69,16 @@ const Layout = ({ children }) => {
         { name: 'Tanaman', path: '/pokok', icon: TreeDeciduous },
         { name: 'Peta Kebun', path: '/peta', icon: Map },
         { name: 'Inspeksi', path: '/inspeksi', icon: Stethoscope },
+      ]
+    },
+    {
+      id: 'busut',
+      type: 'section',
+      name: 'Busut Management',
+      icon: Mountain,
+      items: [
+        { name: 'Kawasan Busut', path: '/zones', icon: Mountain },
+        { name: 'Senarai Busut', path: '/busut', icon: Map },
       ]
     },
     {

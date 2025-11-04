@@ -21,6 +21,9 @@ import Users from './pages/Users';
 import Reports from './pages/Reports';
 import Security from './pages/Security';
 import Profile from './pages/Profile';
+import Zones from './pages/Zones';
+import Busut from './pages/Busut';
+import BusutDetails from './pages/BusutDetails';
 
 function App() {
   return (
@@ -183,6 +186,36 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Profile />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/zones"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Zones />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/busut"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Busut />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/busut/:id"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <BusutDetails />
                 </Layout>
               </ProtectedRoute>
             }

@@ -26,7 +26,12 @@
       "Bash(if [ -f nul ])",
       "Bash(then echo \"File exists\")",
       "Bash(else echo \"File removed\")",
-      "Bash(fi)"
+      "Bash(fi)",
+      "Bash(git log:*)",
+      "Bash(dir /b:*)",
+      "Bash(del nul 2)",
+      "Bash(nul)",
+      "Bash(.env.render)"
     ],
     "deny": [],
     "ask": []
