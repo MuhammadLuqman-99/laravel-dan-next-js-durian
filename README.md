@@ -130,12 +130,10 @@ durian/
 
 ### For Development
 - 🌳 **[Busut System](docs/guides/BUSUT_SYSTEM.md)** - How busut management works
-- 📱 **[Mobile Guide](docs/guides/MOBILE.md)** - Mobile optimization
 - 🎨 **[Performance](docs/guides/PERFORMANCE.md)** - Optimization tips
 
 ### For Troubleshooting
 - ❌ **[Common Issues](docs/deployment/TROUBLESHOOTING.md)** - Fix common errors
-- 🐛 **[Debug Guide](docs/guides/DEBUG.md)** - Debugging tips
 
 ---
 
@@ -275,7 +273,7 @@ Created with ❤️ for Malaysian durian farmers
 
 Need help?
 1. Check **[Troubleshooting Guide](docs/deployment/TROUBLESHOOTING.md)**
-2. Review **[Common Issues](docs/guides/COMMON_ISSUES.md)**
+2. Review **[Documentation Index](docs/README.md)**
 3. Check deployment logs on Render/Vercel
 
 ---
@@ -285,7 +283,7 @@ Need help?
 - [Backend API Docs](https://durian-backend-b9u2.onrender.com/api)
 - [Render Dashboard](https://dashboard.render.com/)
 - [Vercel Dashboard](https://vercel.com/dashboard)
-- [PostgreSQL Connection](docs/guides/DATABASE.md)
+- [Documentation Index](docs/README.md)
 
 ---
 
