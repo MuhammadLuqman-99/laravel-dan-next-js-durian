@@ -31,7 +31,11 @@
       "Bash(dir /b:*)",
       "Bash(del nul 2)",
       "Bash(nul)",
-      "Bash(.env.render)"
+      "Bash(.env.render)",
+      "Bash(git ls-tree:*)",
+      "Bash(git submodule:*)",
+      "Bash(git rm:*)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
     "ask": []

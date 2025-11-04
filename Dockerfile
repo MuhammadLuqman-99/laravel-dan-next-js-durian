@@ -75,6 +75,10 @@ echo "Starting Laravel application..." \n\
 echo "Running migrations..." \n\
 php artisan migrate --force || echo "Migration failed, continuing..." \n\
 \n\
+# Seed database (creates admin user and sample data) \n\
+echo "Seeding database..." \n\
+php artisan db:seed --force || echo "Seeding failed or already seeded, continuing..." \n\
+\n\
 # Clear old caches \n\
 echo "Clearing caches..." \n\
 php artisan config:clear || true \n\

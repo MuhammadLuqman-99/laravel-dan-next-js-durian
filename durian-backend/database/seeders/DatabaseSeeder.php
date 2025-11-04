@@ -11,28 +11,34 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create Admin User
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@durian.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-        ]);
+        // Create Admin User (won't duplicate if already exists)
+        User::firstOrCreate(
+            ['email' => 'admin@durian.com'],
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+            ]
+        );
 
         // Create Pekerja Users
-        User::create([
-            'name' => 'Ahmad bin Ali',
-            'email' => 'ahmad@durian.com',
-            'password' => Hash::make('password'),
-            'role' => 'pekerja',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'ahmad@durian.com'],
+            [
+                'name' => 'Ahmad bin Ali',
+                'password' => Hash::make('password'),
+                'role' => 'pekerja',
+            ]
+        );
 
-        User::create([
-            'name' => 'Siti binti Hassan',
-            'email' => 'siti@durian.com',
-            'password' => Hash::make('password'),
-            'role' => 'pekerja',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'siti@durian.com'],
+            [
+                'name' => 'Siti binti Hassan',
+                'password' => Hash::make('password'),
+                'role' => 'pekerja',
+            ]
+        );
 
         // Create sample Pokok Durian
         PokokDurian::create([
