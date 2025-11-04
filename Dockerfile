@@ -69,23 +69,31 @@ EXPOSE 8080
 RUN echo '#!/bin/bash \n\
 set -e \n\
 \n\
-# Clear caches \n\
-php artisan config:clear \n\
-php artisan cache:clear \n\
-php artisan route:clear \n\
+echo "Starting Laravel application..." \n\
 \n\
-# Run migrations \n\
-php artisan migrate --force \n\
+# Run migrations first (creates tables including cache) \n\
+echo "Running migrations..." \n\
+php artisan migrate --force || echo "Migration failed, continuing..." \n\
 \n\
-# Cache configs \n\
+# Clear old caches \n\
+echo "Clearing caches..." \n\
+php artisan config:clear || true \n\
+php artisan cache:clear || true \n\
+php artisan route:clear || true \n\
+php artisan view:clear || true \n\
+\n\
+# Rebuild caches \n\
+echo "Building caches..." \n\
 php artisan config:cache \n\
 php artisan route:cache \n\
 php artisan view:cache \n\
 \n\
 # Start PHP-FPM \n\
+echo "Starting PHP-FPM..." \n\
 php-fpm -D \n\
 \n\
 # Start Nginx \n\
+echo "Starting Nginx..." \n\
 nginx -g "daemon off;"' > /start.sh \
     && chmod +x /start.sh
 
