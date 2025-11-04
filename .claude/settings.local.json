@@ -35,7 +35,10 @@
       "Bash(git ls-tree:*)",
       "Bash(git submodule:*)",
       "Bash(git rm:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(.npmrc)",
+      "Bash(docs/deployment/RENDER.md)",
+      "Bash(docs/deployment/VERCEL.md)"
     ],
     "deny": [],
     "ask": []
