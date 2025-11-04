@@ -1,0 +1,13 @@
+APP_NAME="Sistem Pengurusan Kebun Durian"
+APP_ENV=production
+APP_DEBUG=false
+LOG_CHANNEL=stack
+LOG_LEVEL=error
+
+# Database will be auto-configured by Render
+# using DATABASE_URL environment variable
+
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+
+SANCTUM_STATEFUL_DOMAINS=

@@ -22,17 +22,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /app
 
-# Copy composer files first for dependency caching
-COPY durian-backend/composer.json durian-backend/composer.lock ./
+# Copy application files
+COPY . .
 
-# Install PHP dependencies (without scripts first for caching)
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
-
-# Copy rest of application
-COPY durian-backend/ .
-
-# Run composer scripts (post-install, etc.)
-RUN composer dump-autoload --optimize
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Create storage directories and set permissions
 RUN mkdir -p storage/framework/{sessions,views,cache} \
